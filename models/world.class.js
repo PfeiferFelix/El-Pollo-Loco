@@ -13,10 +13,23 @@ class World {
         this.ctx = canvas.getContext("2d");
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
+    }
+
+    checkCollisions(){
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if (this.character.isColliding(enemy)){
+                    console.log("colision with character", enemy)
+                }
+            });
+        }, 1000);
+
+
     }
 
     //draw() wird immer wieder aufgerufen, damit die Animation flüssig bleibt. requestAnimationFrame sorgt dafür, dass draw() immer dann aufgerufen wird, wenn der Browser bereit ist, den nächsten Frame zu zeichnen. Dadurch wird die Animation effizient und flüssig dargestellt.
@@ -46,21 +59,29 @@ class World {
 
     addToMap(movableObject) {
         if (movableObject.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(movableObject.width, 0);
-            this.ctx.scale(-1, 1);
-            movableObject.x = movableObject.x * -1;
+            this.flipImage(movableObject);
         }
-        this.ctx.drawImage(
-            movableObject.img,
-            movableObject.x,
-            movableObject.y,
-            movableObject.width,
-            movableObject.height,
-        );
+        movableObject.draw(this.ctx);
+        movableObject.drawFrame(this.ctx);
+
         if (movableObject.otherDirection) {
-            this.ctx.restore();
-            movableObject.x = movableObject.x * -1;
+            this.flipImageBack(movableObject);
         }
     }
+
+
+
+
+    flipImage(movableObject) {
+        this.ctx.save();
+        this.ctx.translate(movableObject.width, 0);
+        this.ctx.scale(-1, 1);
+        movableObject.x = movableObject.x * -1;
+    }
+
+    flipImageBack(movableObject) {
+        this.ctx.restore();
+        movableObject.x = movableObject.x * -1;
+    }
+
 }
