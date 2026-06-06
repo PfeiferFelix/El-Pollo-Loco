@@ -70,7 +70,7 @@ class Character extends MovableObject {
             }
 
             this.world.camera_x = -this.x + 100;
-        }, 1000 / 60);
+        }, 1000/60);
 
         setInterval(() => {
             if (this.isDead()){
@@ -85,7 +85,7 @@ class Character extends MovableObject {
                     this.playAnimation(this.IMAGES_WALKING);
                 }
             }
-        }, 20);
+        }, 100);
     }
 
     jump() {

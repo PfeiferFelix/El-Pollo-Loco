@@ -2,8 +2,59 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-position: center;
+    background-image: url(img/sketch1999-desert-5385998.png);
+}
+
+#game-wrapper {
+    position: relative;
 }
 
 canvas{
     background-color: black;
+    display: block;
+}
+
+#start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#start-screen-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#start-screen button {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    margin-bottom: 40px;
+    padding: 12px 32px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+@media only screen and ( max-width: 720px){
+    canvas{
+        width: 100%;
+    }
+}
+@media only screen and ( max-width: 480px){
+    canvas{
+        width: 100vh;
+    }
 }

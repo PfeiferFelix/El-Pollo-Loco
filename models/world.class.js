@@ -1,6 +1,6 @@
 class World {
     character = new Character();
-    level = level1;
+    level = createLevel1();
     ctx;
     canvas;
     keyboard;
@@ -37,7 +37,7 @@ class World {
 
     checkcolissions(){
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)){
+            if (this.character.isColliding(enemy) && !this.character.isHurt()){
                 this.character.hit();
                 this.statusBar.setPercantage(this.character.energy);
             }
