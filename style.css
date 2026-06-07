@@ -47,6 +47,28 @@ canvas{
     font-size: 1.2rem;
     cursor: pointer;
 }
+.saloon_door{
+    height: 100px;
+    width: 100px;
+}
+.openclipart{
+    height: 100px;
+    width: 100px;
+}
+
+.Start_Game{
+    display: flex;
+    flex-direction: column;
+}
+.Start_Game_Headline{
+   margin-left: 20px;
+}
+.Menu_Buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
 
 @media only screen and ( max-width: 720px){
     canvas{
