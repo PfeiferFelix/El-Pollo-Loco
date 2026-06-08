@@ -46,14 +46,20 @@ canvas{
     padding: 12px 32px;
     font-size: 1.2rem;
     cursor: pointer;
+    background: transparent;
+    border: none;
 }
 .saloon_door{
     height: 100px;
     width: 100px;
+       background: transparent;
+    border: none;
 }
 .openclipart{
     height: 100px;
     width: 100px;
+       background: transparent;
+    border: none;
 }
 
 .Start_Game{
