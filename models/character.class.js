@@ -35,11 +35,7 @@ class Character extends MovableObject {
         "img/2_character_pepe/4_hurt/H-41.png",
         "img/2_character_pepe/4_hurt/H-42.png",
         "img/2_character_pepe/4_hurt/H-43.png",
-
-
     ];
-
-
     world;
 
     currentImage = 0;
@@ -87,8 +83,9 @@ class Character extends MovableObject {
             }
         }, 100);
     }
+    
 
     jump() {
-        this.speedY = 15;
+        this.speedY = 16;
     }
 }
