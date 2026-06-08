@@ -10,6 +10,8 @@ class World {
     statusBarSalsa = new StatusBarSalsa();
     statusBarBoss = new StatusBarBoss();
     throwableObject = [];
+    coins = 0;
+    salsa = 0;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -22,19 +24,29 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Endboss) {
+                enemy.character = this.character;
+            }
+        });
     }
 
     run(){
         setInterval(() => {
             this.checkcolissions();
             this.checkThrowObjects();
+            this.collectCoins();
+            this.collectSalsa();
         }, 200);
     }
 
     checkThrowObjects(){
-        if (this.keyboard.D){
+        if (this.keyboard.D && this.salsa > 0){
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObject.push(bottle);
+            this.salsa --;
+                let percentage = (this.salsa /5) * 100 //5 bottles is 100%
+                this.statusBarSalsa.setPercantage(percentage);
         }
     }
 
@@ -46,6 +58,40 @@ class World {
             }
         });
     }
+    collectCoins(){
+        this.level.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin)){
+                this.level.coins.splice(index, 1)
+                if (this.coins < 5){
+                    this.coins ++;
+                }
+                let percentage = (this.coins /5) * 100 //5 coins is 100%
+                this.statusBarCoin.setPercantage(percentage);
+            }
+
+        })
+    }
+
+      collectSalsa(){
+        this.level.salsa.forEach((bottle, index) => {
+            if (this.character.isColliding(bottle)){
+                this.level.salsa.splice(index, 1)
+                if (this.salsa < 5){
+                    this.salsa ++;
+                }
+                let percentage = (this.salsa /5) * 100 //5 bottles is 100%
+                this.statusBarSalsa.setPercantage(percentage);
+            }
+
+        })
+    }
+
+  
+
+
+
+
+
 
     //draw() wird immer wieder aufgerufen, damit die Animation flüssig bleibt. requestAnimationFrame sorgt dafür, dass draw() immer dann aufgerufen wird, wenn der Browser bereit ist, den nächsten Frame zu zeichnen. Dadurch wird die Animation effizient und flüssig dargestellt.
     draw() {
