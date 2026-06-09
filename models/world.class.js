@@ -12,6 +12,7 @@ class World {
     throwableObject = [];
     coins = 0;
     salsa = 0;
+    bottleThrown = false;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -31,7 +32,7 @@ class World {
         });
     }
 
-    run(){
+    run() {
         setInterval(() => {
             this.checkcolissions();
             this.checkThrowObjects();
@@ -40,53 +41,79 @@ class World {
         }, 200);
     }
 
-    checkThrowObjects(){
-        if (this.keyboard.D && this.salsa > 0){
+    checkThrowObjects() {
+        if (this.keyboard.D && this.salsa > 0 && !this.bottleThrown) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObject.push(bottle);
-            this.salsa --;
-                let percentage = (this.salsa /5) * 100 //5 bottles is 100%
-                this.statusBarSalsa.setPercantage(percentage);
+            this.salsa--;
+            this.bottleThrown = true;
+            let percentage = (this.salsa / 5) * 100;
+            this.statusBarSalsa.setPercantage(percentage);
+        }
+        if (!this.keyboard.D) {
+            this.bottleThrown = false;
         }
     }
 
-    checkcolissions(){
+    checkcolissions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && !this.character.isHurt()){
+            if (this.character.isColliding(enemy) && !this.character.isHurt()) {
                 this.character.hit();
                 this.statusBar.setPercantage(this.character.energy);
             }
         });
-    }
-    collectCoins(){
-        this.level.coins.forEach((coin, index) => {
-            if (this.character.isColliding(coin)){
-                this.level.coins.splice(index, 1)
-                if (this.coins < 5){
-                    this.coins ++;
+        let endboss = this.level.enemies.find(e => e instanceof Endboss);
+        if (endboss) {
+            this.throwableObject = this.throwableObject.filter((bottle) => {
+                if (endboss.isColliding(bottle)) {
+                    endboss.hit();
+                    this.statusBarBoss.setPercantage(endboss.energy);
+                    return false;
                 }
-                let percentage = (this.coins /5) * 100 //5 coins is 100%
+                return true;
+            });
+        }
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
+                this.throwableObject = this.throwableObject.filter((bottle) => {
+                    if (enemy.isColliding(bottle) && !enemy.isDead()) {
+                        enemy.hit();
+                        return false;
+                    }
+                    return true;
+                });
+            }
+        });
+    }
+    collectCoins() {
+        this.level.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin)) {
+                this.level.coins.splice(index, 1)
+                if (this.coins < 5) {
+                    this.coins++;
+                }
+                let percentage = (this.coins / 5) * 100 //5 coins is 100%
                 this.statusBarCoin.setPercantage(percentage);
             }
 
         })
     }
 
-      collectSalsa(){
+    collectSalsa() {
         this.level.salsa.forEach((bottle, index) => {
-            if (this.character.isColliding(bottle)){
+            if (this.character.isColliding(bottle)) {
                 this.level.salsa.splice(index, 1)
-                if (this.salsa < 5){
-                    this.salsa ++;
+                if (this.salsa < 5) {
+                    this.salsa++;
                 }
-                let percentage = (this.salsa /5) * 100 //5 bottles is 100%
+                let percentage = (this.salsa / 5) * 100 //5 bottles is 100%
                 this.statusBarSalsa.setPercantage(percentage);
             }
 
         })
     }
 
-  
+
 
 
 
@@ -114,12 +141,12 @@ class World {
         this.addObjectsToMap(this.level.salsa);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObject);
-        
+
 
 
 
         this.ctx.translate(-this.camera_x, 0);
-    
+
 
         let self = this;
         requestAnimationFrame(function () {
