@@ -22,7 +22,6 @@ class Endboss extends MovableObject {
     ];
 
     IMAGES_HURT = [
-
         "img/4_enemie_boss_chicken/4_hurt/G21.png",
         "img/4_enemie_boss_chicken/4_hurt/G22.png",
         "img/4_enemie_boss_chicken/4_hurt/G23.png",
@@ -48,12 +47,17 @@ class Endboss extends MovableObject {
 
     constructor() {
         super().loadImage("img/4_enemie_boss_chicken/2_alert/G5.png");
-        this.speed = 0.15
+        this.speed = 0.15;
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_ATTACK);
         this.x = 4800;
+        this.isAlerted = false;
+        this.alertFinished = false;
+        this.hasJumped = false;
+        this.isJumping = false;
         this.animate();
     }
 
@@ -67,28 +71,84 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        let animationInterval = setInterval(() => {
-            if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                this.y = 80;
-                clearInterval(animationInterval);  //  Animation stoppen
-                clearInterval(moveInterval); // move left animation stoppen
-                return;
-            } else if (this.character.x >= 3000) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else {
-                this.playAnimation(this.IMAGES_ALERT);
-            }
-        }, 200);
-        let moveInterval = setInterval(() => {
-            if (!this.character) return;
-            if (this.character.x >= 3000) {
-                this.moveLeft();
-            }
+        this.animationInterval = setInterval(() => this.playStateAnimation(), 200);
+        this.moveInterval = setInterval(() => {
+            if (this.alertFinished && !this.isDead() && this.CharacterIsNotInSight()) this.moveLeft();
         }, 1000 / 60);
     }
 
+    playStateAnimation() {
+        if (this.isDead()) {
+            this.handleDead();
+        } else if (this.isHurt()) {
+            this.playAnimation(this.IMAGES_HURT);
+        } else if (!this.isAlerted) {
+            this.handleWalking();
+        } else if (!this.alertFinished) {
+            this.playAnimation(this.IMAGES_ALERT);
+        } else if (this.CharacterIsNotInSight()) {
+            this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            this.handleAttack();
+        }
+    }
 
+    handleDead() {
+        this.playAnimation(this.IMAGES_DEAD);
+        this.y = 80;
+        clearInterval(this.animationInterval);
+        clearInterval(this.moveInterval);
+    }
+
+    handleWalking() {
+        this.playAnimation(this.IMAGES_WALKING);
+        if (this.isCharacterInSight()) {
+            this.isAlerted = true;
+            setTimeout(() => { this.alertFinished = true; }, this.IMAGES_ALERT.length * 200);
+        }
+    }
+
+    handleAttack() {
+        this.playAnimation(this.IMAGES_ATTACK);
+        if (!this.hasJumped) {
+            this.hasJumped = true;
+            this.currentImage = 0;
+            setTimeout(() => {
+                this.jumpVorwoard();
+                setInterval(() => {
+                    if (!this.CharacterIsNotInSight()) this.jumpVorwoard();
+                }, this.IMAGES_ATTACK.length * 200);
+            }, 1000);
+        }
+    }
+
+    isCharacterInSight() {
+        let distance = this.x - this.character.x;
+        return distance < 300;
+    }
+    CharacterIsNotInSight() {
+        let distance = this.x - this.character.x;
+        return distance >= 300;
+    }
+
+    jumpVorwoard() {
+        this.isJumping = true;
+        let distance = 0;
+        let jumpVorwoardInterval = setInterval(() => {
+            if (!this.CharacterIsNotInSight()) {
+                this.x -= 10;
+            }
+            distance += 5;
+            if (distance <= 60) {
+                this.y -= 5;
+            } else {
+                this.y += 5;
+            }
+            if (distance >= 120) {
+                clearInterval(jumpVorwoardInterval);
+                this.y = 50;
+                this.isJumping = false;
+            }
+        }, 25);
+    }
 }
