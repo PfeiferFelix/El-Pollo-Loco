@@ -19,16 +19,19 @@ class ThrowableObject extends MovableObject {
   constructor(x, y) {
     super().loadImage("img/6_salsa_bottle/salsa_bottle.png");
     this.loadImages(this.THROW_BOTTLE);
+    this.loadImages(this.BOTTLE_SPLASH);
     this.x = x;
     this.y = y;
+    this.groundY = 350;
     this.height = 100;
     this.width = 80;
     this.throw();
 
+
   }
 
   animate() {
-    setInterval(() => {
+    this.animateInterval = setInterval(() => {
       this.playAnimation(this.THROW_BOTTLE);
     }, 100);
   }
@@ -37,11 +40,12 @@ class ThrowableObject extends MovableObject {
     this.speedY = 10; //Bogen desto größer derso höher der Bogen der die Flasche fliegt
     this.applyGravity();
     let distance = 0; //Startwert
-    let ThrowIntervall = setInterval(() => {
+    this.ThrowIntervall = setInterval(() => {
       this.x += 10; //geschwindigkeit dersto höher desto schneller nach rechts
       distance += 5;
       if (distance >= 500) { //Wie weit die Flasche fliegt
-        clearInterval(ThrowIntervall);
+        clearInterval(this.ThrowIntervall);
+
       }
     }, 25);
     this.animate();
