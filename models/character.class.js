@@ -66,8 +66,8 @@ class Character extends MovableObject {
 
 
     world;
-
     currentImage = 0;
+    lastActionTime = Date.now();
 
     constructor() {
         super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
@@ -87,34 +87,47 @@ class Character extends MovableObject {
                 this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
+                this.lastActionTime = Date.now();
             }
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
+                this.lastActionTime = Date.now();
             }
             if ((this.world.keyboard.UP || this.world.keyboard.SPACE) && !this.isaboveGround()) {
                 this.jump();
+                this.lastActionTime = Date.now();
+            }
+            if (this.world.keyboard.D) {
+                this.lastActionTime = Date.now();
             }
 
             this.world.camera_x = -this.x + 80;
-        }, 1000/60);
+        }, 1000 / 60);
 
         setInterval(() => {
-            if (this.isDead()){
-                this.playAnimation(this.IMAGES_DEAD);
-            }else if(this.isHurt()){
+            if (this.isDead()) {
+                console.log("dead");
+                this.playAnimationOnce(this.IMAGES_DEAD);
+            } else if (this.isHurt()) {
+                console.log("hurt");
                 this.playAnimation(this.IMAGES_HURT);
-            }
-            else if (this.isaboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
+            } else if (this.isaboveGround() || this.speedY > 0) {
+                console.log("jumping");
+                this.playAnimationOnce(this.IMAGES_JUMPING);
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                console.log("walking");
+                this.playAnimation(this.IMAGES_WALKING);
+            } else if (Date.now() - this.lastActionTime > 3000) {
+                console.log("long idle");
+                this.playAnimation(this.IMAGES_LONG_IDLE);
             } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                }
+                console.log("idle");
+                this.playAnimation(this.IMAGES_IDLE);
             }
         }, 80);
     }
-    
+
 
     jump() {
         this.speedY = 16;
