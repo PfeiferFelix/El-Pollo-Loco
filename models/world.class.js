@@ -21,6 +21,7 @@ class World {
         this.draw();
         this.setWorld();
         this.run();
+
     }
 
     setWorld() {
@@ -45,6 +46,8 @@ class World {
         if (this.keyboard.D && this.salsa > 0 && !this.bottleThrown) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObject.push(bottle);
+            bottle.world = this
+
             this.salsa--;
             this.bottleThrown = true;
             let percentage = (this.salsa / 5) * 100;
