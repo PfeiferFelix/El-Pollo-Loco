@@ -13,6 +13,7 @@ class World {
     coins = 0;
     salsa = 0;
     bottleThrown = false;
+    audio_splash_bottle = new Audio ("audio/glass_bottle_splash.mp3");
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -60,7 +61,7 @@ class World {
 
     checkcolissions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && !this.character.isHurt()) {
+            if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
                 this.character.hit();
                 this.statusBar.setPercantage(this.character.energy);
             }
@@ -71,6 +72,7 @@ class World {
                 if (endboss.isColliding(bottle)) {
                     endboss.hit();
                     this.statusBarBoss.setPercantage(endboss.energy);
+                    this.audio_splash_bottle.play();
                     return false;
                 }
                 return true;
@@ -81,10 +83,18 @@ class World {
                 this.throwableObject = this.throwableObject.filter((bottle) => {
                     if (enemy.isColliding(bottle) && !enemy.isDead()) {
                         enemy.hit();
+                        this.audio_splash_bottle.play();
                         return false;
+                        
                     }
                     return true;
+                    
                 });
+            }
+            if (this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
+                enemy.hit();
+                this.character.speedY = 8; 
+                return;
             }
         });
     }
