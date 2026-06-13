@@ -109,6 +109,11 @@ class Character extends MovableObject {
             if (this.isDead()) {
                 console.log("dead");
                 this.playAnimationOnce(this.IMAGES_DEAD);
+                this.moveLeft = false;
+                this.moveRight = false;
+                this.jump = false;
+                this.collectCoins = false;
+                this.collectSalsa = false
             } else if (this.isHurt()) {
                 console.log("hurt");
                 this.playAnimation(this.IMAGES_HURT);
