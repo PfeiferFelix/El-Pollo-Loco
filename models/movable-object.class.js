@@ -17,6 +17,11 @@ class MovableObject extends DrawableObject {
                 clearInterval(this.ThrowIntervall);
                 clearInterval(this.animateInterval);
                 this.speedY = 0;
+                if (!this.splashSoundPlayed) {
+                    this.splashSoundPlayed = true;
+                    this.world.audio_splash_bottle.currentTime = 0;
+                    this.world.audio_splash_bottle.play();
+                }
                 this.playAnimation(this.BOTTLE_SPLASH);
                 if (this.currentImage >= this.BOTTLE_SPLASH.length) {
                     this.world.throwableObject = this.world.throwableObject.filter(bottle => bottle !== this);
@@ -42,6 +47,12 @@ class MovableObject extends DrawableObject {
             this.y + this.height > movableObject.y &&
             this.x < movableObject.x + movableObject.width &&
             this.y < movableObject.y + movableObject.height
+    }
+
+    isJumpingOnTop(enemy){
+        return this.speedY < 0 &&
+            this.isColliding(enemy)&& this.y + this.height < enemy.y +35;
+
     }
 
     moveRight() {
@@ -87,6 +98,10 @@ class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();// so speichert man Zeit in Zahlenform
         }
+        if (this.isDead){
+            return;
+            
+        }
     }
 
     isHurt() {
@@ -97,6 +112,7 @@ class MovableObject extends DrawableObject {
 
     isDead() {
         return this.energy == 0;
+          
     }
 
 
