@@ -12,17 +12,27 @@ class MovableObject extends DrawableObject {
             if (this.isaboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+            } if (this instanceof ThrowableObject && this.y > this.groundY) {
+
+                clearInterval(this.ThrowIntervall);
+                clearInterval(this.animateInterval);
+                this.speedY = 0;
+                this.playAnimation(this.BOTTLE_SPLASH);
+                if (this.currentImage >= this.BOTTLE_SPLASH.length) {
+                    this.world.throwableObject = this.world.throwableObject.filter(bottle => bottle !== this);
+                }
             }
+
         }, 1000 / 25);
+
     }
 
     isaboveGround() {
         if (this instanceof ThrowableObject) {
-            return true;
+            return this.y <= this.groundY;
         } else {
-            return this.y < 155;
+            return this.y < 150;
         }
-
     }
 
 
@@ -46,10 +56,25 @@ class MovableObject extends DrawableObject {
     }
 
     playAnimation(images) {
+        if (this.currentAnimation !== images) {
+            this.currentImage = 0;
+            this.currentAnimation = images;
+        }
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
+
+    playAnimationOnce(images) {
+        if (this.currentAnimation !== images) {
+            this.currentImage = 0;
+            this.currentAnimation = images;
+        }
+        if (this.currentImage < images.length) {
+            this.img = this.imageCache[images[this.currentImage]];
+            this.currentImage++;
+        }
     }
     jump() {
         this.speedY = 15;
