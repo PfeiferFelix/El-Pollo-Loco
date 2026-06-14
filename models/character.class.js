@@ -62,6 +62,7 @@ class Character extends MovableObject {
         "img/2_character_pepe/1_idle/long_idle/I-19.png",
         "img/2_character_pepe/1_idle/long_idle/I-20.png",
     ];
+    audio_snoring = new Audio("audio/snoring.mp3");
 
 
 
@@ -114,21 +115,34 @@ class Character extends MovableObject {
                 this.jump = false;
                 this.collectCoins = false;
                 this.collectSalsa = false
+                this.audio_snoring.pause();
+                this.audio_snoring.currentTime = 0;
             } else if (this.isHurt()) {
                 console.log("hurt");
                 this.playAnimation(this.IMAGES_HURT);
+               this.audio_snoring.pause();
+               this.audio_snoring.currentTime = 0;
             } else if (this.isaboveGround() || this.speedY > 0) {
                 console.log("jumping");
                 this.playAnimationOnce(this.IMAGES_JUMPING);
+                  this.audio_snoring.pause();
+               this.audio_snoring.currentTime = 0;
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 console.log("walking");
                 this.playAnimation(this.IMAGES_WALKING);
+                  this.audio_snoring.pause();
+               this.audio_snoring.currentTime = 0;
             } else if (Date.now() - this.lastActionTime > 3000) {
                 console.log("long idle");
                 this.playAnimation(this.IMAGES_LONG_IDLE);
+                this.audio_snoringPlayed = true;
+
+                this.audio_snoring.play();
             } else {
                 console.log("idle");
                 this.playAnimation(this.IMAGES_IDLE);
+                  this.audio_snoring.pause();
+               this.audio_snoring.currentTime = 0;
             }
         }, 80);
     }
