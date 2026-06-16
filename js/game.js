@@ -14,6 +14,14 @@ function init() {
     console.log(" My Character is", world.character);
 }
 
+function showGameOver() {
+    document.getElementById('game-over-screen').style.display = 'block';
+}
+
+function showYouWon() {
+    document.getElementById('you-won-screen').style.display = 'block';
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
