@@ -35,9 +35,17 @@
         </div>
         <div id="game-over-screen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;">
             <img src="img/9_intro_outro_screens/game_over/game over.png" alt="game over" style="width:100%; height:100%;">
+            <div class="end-screen-buttons">
+                <button class="end-btn" onclick="restartGame()">Restart Game</button>
+                <button class="end-btn" onclick="goToHomeMenu()">Home Menu</button>
+            </div>
         </div>
         <div id="you-won-screen" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%;">
             <img src="img/You won, you lost/You won A.png" alt="you won" style="width:100%; height:100%;">
+            <div class="end-screen-buttons">
+                <button class="end-btn" onclick="restartGame()">Restart Game</button>
+                <button class="end-btn" onclick="goToHomeMenu()">Home Menu</button>
+            </div>
         </div>
     </div>
 
