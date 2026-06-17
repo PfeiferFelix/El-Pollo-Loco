@@ -64,6 +64,7 @@ class Character extends MovableObject {
     ];
     audio_snoring = new Audio("audio/snoring.mp3");
     audio_you_lost = new Audio("audio/you_lost.mp3");
+    audio_hurt = new Audio("audio/pepe_hurt.mp3");
 
 
 
@@ -120,6 +121,7 @@ class Character extends MovableObject {
         } else if (this.world.endboss && this.world.endboss.isDead()) {
             this.stopAmbientAudio();
         } else if (this.isHurt()) {
+            this.hurtAudio();
             this.handleHurt();
         } else if (this.isaboveGround() || this.speedY > 0) {
             this.handleAboveGround();
@@ -130,6 +132,9 @@ class Character extends MovableObject {
         } else {
             this.handleIdle();
         }
+        if (!this.isHurt()) {
+            this.audio_hurtPlayed = false;
+        }
     }
 
     handleDead() {
@@ -138,6 +143,8 @@ class Character extends MovableObject {
         this.audio_snoring.currentTime = 0;
         if (!this.audio_you_lostPlayed) {
             this.audio_you_lostPlayed = true;
+            backgroundMusic.pause();
+            backgroundMusic.currentTime = 0;
             this.audio_you_lost.play();
             setTimeout(() => showGameOver(), 1500);
         }
@@ -179,5 +186,15 @@ class Character extends MovableObject {
 
     jump() {
         this.speedY = 16;
+    }
+
+
+     hurtAudio(){
+        if (this.isHurt()){
+            if (!this.audio_hurtPlayed){
+                this.audio_hurtPlayed = true;
+                this.audio_hurt.play();
+            }
+        }
     }
 }
