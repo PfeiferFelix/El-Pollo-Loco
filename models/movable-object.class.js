@@ -51,7 +51,7 @@ class MovableObject extends DrawableObject {
 
     isJumpingOnTop(enemy){
         return this.speedY < 0 &&
-            this.isColliding(enemy)&& this.y + this.height < enemy.y +35;
+            this.isColliding(enemy)&& this.y + this.height < enemy.y +45;
 
     }
 
@@ -107,7 +107,7 @@ class MovableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit; //Diefference in ms
         timepassed = timepassed / 1000; // Difference in ms
-        return timepassed < 0.5;
+        return timepassed < 0.3;
     }
 
     isDead() {
