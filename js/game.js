@@ -1,9 +1,13 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let backgroundMusic = new Audio('audio/background.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.3;
 
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
+    backgroundMusic.play();
     init();
 }
 
@@ -22,6 +26,21 @@ function showYouWon() {
     document.getElementById('you-won-screen').style.display = 'block';
 }
 
+function restartGame() {
+    document.getElementById('game-over-screen').style.display = 'none';
+    document.getElementById('you-won-screen').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'none';
+    backgroundMusic.currentTime = 0;
+    backgroundMusic.play();
+    init();
+}
+
+function goToHomeMenu() {
+    document.getElementById('game-over-screen').style.display = 'none';
+    document.getElementById('you-won-screen').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'flex';
+}
+
 window.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
@@ -38,7 +57,7 @@ window.addEventListener("keydown", (e) => {
     if (e.keyCode == 32) {
         keyboard.SPACE = true;
     }
-     if (e.keyCode == 68) {
+    if (e.keyCode == 68) {
         keyboard.D = true;
     }
 });
@@ -59,7 +78,7 @@ window.addEventListener("keyup", (e) => {
     if (e.keyCode == 32) {
         keyboard.SPACE = false;
     }
-     if (e.keyCode == 68) {
+    if (e.keyCode == 68) {
         keyboard.D = false;
     }
 });
