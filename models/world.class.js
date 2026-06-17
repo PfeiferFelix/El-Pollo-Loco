@@ -14,6 +14,7 @@ class World {
     salsa = 0;
     bottleThrown = false;
     audio_splash_bottle = new Audio ("audio/glass_bottle_splash.mp3");
+    audio_collect_coin = new Audio("audio/collect_coin.mp3");
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -103,6 +104,8 @@ class World {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
                 this.level.coins.splice(index, 1)
+                this.audio_collect_coin.currentTime = 0;
+                this.audio_collect_coin.play();
                 if (this.coins < 5) {
                     this.coins++;
                 }
