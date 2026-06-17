@@ -43,7 +43,8 @@ class Endboss extends MovableObject {
         "img/4_enemie_boss_chicken/3_attack/G19.png",
         "img/4_enemie_boss_chicken/3_attack/G20.png",
     ];
-     audio_you_lost = new Audio("audio/you_lost.mp3");
+     audio_you_win = new Audio("audio/you_win.mp3");
+     audio_attack = new Audio("audio/chicken_dead.mp3");
 
     constructor() {
         super().loadImage("img/4_enemie_boss_chicken/2_alert/G5.png");
@@ -138,6 +139,7 @@ class Endboss extends MovableObject {
 
     jumpVorwoard() {
         this.isJumping = true;
+        this.attackAudio();
         let distance = 0;
         let jumpVorwoardInterval = setInterval(() => {
             if (!this.CharacterIsNotInSight()) {
@@ -154,14 +156,17 @@ class Endboss extends MovableObject {
                 this.y = 50;
                 this.isJumping = false;
             }
+            this.audio_attackPlayed = false;
         }, 25);
     }
 
     youWon(){
         if (this.isDead()) {
-            if (!this.audio_you_lostPlayed) {
-                    this.audio_you_lostPlayed = true;
-                    this.audio_you_lost.play();
+            if (!this.audio_you_winPlayed) {
+                    this.audio_you_winPlayed = true;
+                    backgroundMusic.pause();
+                    backgroundMusic.currentTime = 0;
+                    this.audio_you_win.play();
                     setTimeout(() => showYouWon(), 1500);
                     this.moveLeft = false;
                 this.character.moveRight = false;
@@ -169,5 +174,13 @@ class Endboss extends MovableObject {
                 }
     }
 
+    }
+    attackAudio(){
+        if (this.isJumping){
+            if (!this.audio_attackPlayed){
+                this.audio_attackPlayed = true;
+                this.audio_attack.play();
+            }
+        }
     }
 }
