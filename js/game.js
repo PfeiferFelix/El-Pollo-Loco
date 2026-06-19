@@ -11,6 +11,33 @@ function startGame() {
     init();
 }
 
+function openSettings() {
+    document.getElementById('settings-screen').style.display = 'flex';
+}
+
+function closeSettings() {
+    document.getElementById('settings-screen').style.display = 'none';
+}
+
+function openHelp() {
+    document.getElementById('help-screen').style.display = 'flex';
+}
+
+function closeHelp() {
+    document.getElementById('help-screen').style.display = 'none';
+}
+
+function muteBackgroundMusic(){
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+}
+function unmuteBackgroundMusic(){
+    backgroundMusic.currentTime = 0;
+     backgroundMusic.play();
+}
+
+
+
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
@@ -40,6 +67,7 @@ function goToHomeMenu() {
     document.getElementById('you-won-screen').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
 }
+
 
 window.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
