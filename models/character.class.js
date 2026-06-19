@@ -127,7 +127,7 @@ class Character extends MovableObject {
             this.handleAboveGround();
         } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             this.handleWalking();
-        } else if (Date.now() - this.lastActionTime > 3000) {
+        } else if (Date.now() - this.lastActionTime > 15000) {
             this.handleLongIdle();
         } else {
             this.handleIdle();
