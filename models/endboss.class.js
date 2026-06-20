@@ -166,7 +166,7 @@ class Endboss extends MovableObject {
                     this.audio_you_winPlayed = true;
                     backgroundMusic.pause();
                     backgroundMusic.currentTime = 0;
-                    this.audio_you_win.play();
+                    if (!soundsMuted) this.audio_you_win.play();
                     setTimeout(() => showYouWon(), 1500);
                     this.moveLeft = false;
                 this.character.moveRight = false;
@@ -179,7 +179,7 @@ class Endboss extends MovableObject {
         if (this.isJumping){
             if (!this.audio_attackPlayed){
                 this.audio_attackPlayed = true;
-                this.audio_attack.play();
+                if (!soundsMuted) this.audio_attack.play();
             }
         }
     }
