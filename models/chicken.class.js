@@ -52,7 +52,7 @@ class Chicken extends MovableObject {
         if (this.isDead){
             if (!this.audio_splashPlayed){
                 this.audio_splashPlayed = true;
-                this.audio_splash.play();
+                if (!soundsMuted) this.audio_splash.play();
             }
         }
     }
