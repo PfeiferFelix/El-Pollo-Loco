@@ -1,9 +1,11 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let soundsMuted = false;
 let backgroundMusic = new Audio('audio/background.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
+
 
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
@@ -36,7 +38,24 @@ function unmuteBackgroundMusic(){
      backgroundMusic.play();
 }
 
+function muteSounds(){
+    soundsMuted = true;
+    if (!world) return;
+    world.character.audio_snoring.pause();
+    world.character.audio_you_lost.pause();
+    world.character.audio_hurt.pause();
+    world.level.enemies.forEach(e => {
+        if (e.audio_splash) e.audio_splash.pause();
+        if (e.audio_attack) e.audio_attack.pause();
+        if (e.audio_you_win) e.audio_you_win.pause();
+    });
+    world.audio_splash_bottle.pause();
+    world.audio_collect_coin.pause();
+}
 
+function unmuteSounds(){
+    soundsMuted = false;
+}
 
 function init() {
     canvas = document.getElementById("canvas");
