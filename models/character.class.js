@@ -145,7 +145,7 @@ class Character extends MovableObject {
             this.audio_you_lostPlayed = true;
             backgroundMusic.pause();
             backgroundMusic.currentTime = 0;
-            this.audio_you_lost.play();
+            if (!soundsMuted) this.audio_you_lost.play();
             setTimeout(() => showGameOver(), 1500);
         }
     }
@@ -193,7 +193,7 @@ class Character extends MovableObject {
         if (this.isHurt()){
             if (!this.audio_hurtPlayed){
                 this.audio_hurtPlayed = true;
-                this.audio_hurt.play();
+                if (!soundsMuted) this.audio_hurt.play();
             }
         }
     }
