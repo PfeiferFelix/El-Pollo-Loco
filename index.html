@@ -85,7 +85,7 @@
             </div>
             <div class="mute_section">
                 <span>Sounds</span>
-                <button class="Menu-bar-btn" onclick="muteSounds()">
+                <button class="Menu-bar-btn" onclick="unmuteSounds()">
                     ON
                 </button>
                 <button class="Menu-bar-btn" onclick="muteSounds()">
@@ -138,6 +138,19 @@
             </div>
         </div>
     </div>
-</body>
 
+    <div id="mobile-btn-bar" class="mobile-btn-bar" style="display:none">
+        <div class="move-btn">
+            <button class="Menu-bar-btn" ontouchstart="keyboard.LEFT=true" ontouchend="keyboard.LEFT=false" ontouchcancel="keyboard.LEFT=false">left</button>
+            <button class="Menu-bar-btn" ontouchstart="keyboard.RIGHT=true" ontouchend="keyboard.RIGHT=false" ontouchcancel="keyboard.RIGHT=false">right</button>
+        </div>
+        <div class="do-btn">
+            <button class="Menu-bar-btn" ontouchstart="keyboard.UP=true" ontouchend="keyboard.UP=false" ontouchcancel="keyboard.UP=false">UP</button>
+            <button class="Menu-bar-btn" ontouchstart="keyboard.D=true" ontouchend="keyboard.D=false" ontouchcancel="keyboard.D=false">throw</button>
+        </div>
+    </div>
+</body>
+<footer>
+    <a class="impressum" href="./impressum.html">Impressum</a>
+</footer>
 </html>
