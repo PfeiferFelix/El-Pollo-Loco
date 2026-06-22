@@ -19,8 +19,10 @@ class MovableObject extends DrawableObject {
                 this.speedY = 0;
                 if (!this.splashSoundPlayed) {
                     this.splashSoundPlayed = true;
-                    this.world.audio_splash_bottle.currentTime = 0;
-                    this.world.audio_splash_bottle.play();
+                    if (!soundsMuted) {
+                        this.world.audio_splash_bottle.currentTime = 0;
+                        this.world.audio_splash_bottle.play();
+                    }
                 }
                 this.playAnimation(this.BOTTLE_SPLASH);
                 if (this.currentImage >= this.BOTTLE_SPLASH.length) {
