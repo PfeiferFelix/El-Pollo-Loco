@@ -167,7 +167,7 @@ class Character extends MovableObject {
 
     handleLongIdle() {
         this.playAnimation(this.IMAGES_LONG_IDLE);
-        this.audio_snoring.play();
+        if (!soundsMuted) this.audio_snoring.play();
         this.audio_you_lost.pause();
         this.audio_you_lost.currentTime = 0;
     }
