@@ -1,7 +1,8 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let soundsMuted = false;
+let soundsMuted = localStorage.getItem('soundsMuted') === 'true';
+let musicMuted = localStorage.getItem('musicMuted') === 'true';
 let backgroundMusic = new Audio('audio/background.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
@@ -9,7 +10,8 @@ backgroundMusic.volume = 0.3;
 
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
-    backgroundMusic.play();
+    document.getElementById('mobile-btn-bar').style.display = 'flex';
+    if (!musicMuted) backgroundMusic.play();
     init();
 }
 
@@ -30,16 +32,25 @@ function closeHelp() {
 }
 
 function muteBackgroundMusic(){
+    musicMuted = true;
+    localStorage.setItem('musicMuted', true);
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
 }
 function unmuteBackgroundMusic(){
+    musicMuted = false;
+    localStorage.setItem('musicMuted', false);
     backgroundMusic.currentTime = 0;
-     backgroundMusic.play();
+    backgroundMusic.play();
+}
+
+function saveToLocalStorage(){
+    localStorage.setItem('soundsMuted', soundsMuted);
 }
 
 function muteSounds(){
     soundsMuted = true;
+    saveToLocalStorage();
     if (!world) return;
     world.character.audio_snoring.pause();
     world.character.audio_you_lost.pause();
@@ -55,6 +66,7 @@ function muteSounds(){
 
 function unmuteSounds(){
     soundsMuted = false;
+    saveToLocalStorage();
 }
 
 function init() {
