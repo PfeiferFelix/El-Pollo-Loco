@@ -42,7 +42,7 @@ class World {
             this.checkThrowObjects();
             this.collectCoins();
             this.collectSalsa();
-        }, 200);
+        }, 1000 / 60);
     }
 
     checkThrowObjects() {
@@ -63,7 +63,7 @@ class World {
 
     checkcolissions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && !this.character.isHurt() && !this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
+            if (this.character.isColliding(enemy) && !this.character.isDead() && !this.character.isHurt() && !this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
                 this.character.hit();
                 this.statusBar.setPercantage(this.character.energy);
             }
