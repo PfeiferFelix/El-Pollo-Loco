@@ -7,7 +7,11 @@ let backgroundMusic = new Audio('audio/background.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
 
-
+/**
+ * This function makes the start screen invisible
+ * When the Screen size is small the button bar on mobile will show up and the h1 will disapear
+ * so have no scrollbar.
+ */
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     if (window.innerWidth <= 768 || window.innerHeight <= 500) {
@@ -18,40 +22,60 @@ function startGame() {
     if (!musicMuted) backgroundMusic.play();
     init();
 }
-
+/**
+ * opens the settings menu
+ */
 function openSettings() {
     document.getElementById('settings-screen').style.display = 'flex';
 }
-
+/**
+ * closes the settings menu
+ */
 function closeSettings() {
     document.getElementById('settings-screen').style.display = 'none';
 }
-
+/**
+ * opens the help menu
+ */
 function openHelp() {
     document.getElementById('help-screen').style.display = 'flex';
 }
-
+/**
+ * closes the help menu
+ */
 function closeHelp() {
     document.getElementById('help-screen').style.display = 'none';
 }
-
+/**
+ * when its pressed, the backgorund music will be mute
+ * and it pushes it to the local storage
+ */
 function muteBackgroundMusic() {
     musicMuted = true;
     localStorage.setItem('musicMuted', true);
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
 }
+
+/**
+ * when its pressed, the backgorund music will be unmute
+ * and it pushes it to the local storage
+ */
 function unmuteBackgroundMusic() {
     musicMuted = false;
     localStorage.setItem('musicMuted', false);
     backgroundMusic.currentTime = 0;
     backgroundMusic.play();
 }
-
+/**
+ * saves the mute state to local storage
+ */
 function saveToLocalStorage() {
     localStorage.setItem('soundsMuted', soundsMuted);
 }
-
+/**
+ * when the screen size is small the menu bar will be transparent
+ */
 function disableHomeButtons() {
     if (window.innerWidth <= 768 || window.innerHeight <= 500) {
         document.getElementById("menu_bar").style.display = 'none';
@@ -73,7 +97,9 @@ function muteSounds() {
     world.audio_splash_bottle.pause();
     world.audio_collect_coin.pause();
 }
-
+/**
+ * unmute the sounds
+ */
 function unmuteSounds() {
     soundsMuted = false;
     saveToLocalStorage();
@@ -82,18 +108,23 @@ function unmuteSounds() {
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
-
-    console.log(" My Character is", world.character);
 }
-
+/**
+ * game over screen
+ */
 function showGameOver() {
     document.getElementById('game-over-screen').style.display = 'block';
 }
-
+/**
+ * you won screen
+ */
 function showYouWon() {
     document.getElementById('you-won-screen').style.display = 'block';
 }
-
+/**
+ * game over, you won and start screen will be transparen
+ * game starts from beginning
+ */
 function restartGame() {
     document.getElementById('game-over-screen').style.display = 'none';
     document.getElementById('you-won-screen').style.display = 'none';
@@ -102,14 +133,18 @@ function restartGame() {
     backgroundMusic.play();
     init();
 }
-
+/**
+ * gose back to the main menu
+ */
 function goToHomeMenu() {
     document.getElementById('game-over-screen').style.display = 'none';
     document.getElementById('you-won-screen').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
 }
 
-
+/**
+ * key down key codes to move the character
+ */
 window.addEventListener("keydown", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
@@ -130,7 +165,9 @@ window.addEventListener("keydown", (e) => {
         keyboard.D = true;
     }
 });
-
+/**
+ * keyup keycodes to move the character
+ */
 window.addEventListener("keyup", (e) => {
     if (e.keyCode == 39) {
         keyboard.RIGHT = false;
