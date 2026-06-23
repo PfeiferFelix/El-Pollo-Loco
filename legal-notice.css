@@ -1,0 +1,92 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #fff;
+    background-image: url('img/sketch1999-desert-5385998.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 48px 24px 80px;
+}
+
+.ln-page {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.ln-card {
+    background: none;
+    padding: 0;
+}
+
+.ln-back {
+    display: inline-block;
+    margin-bottom: 32px;
+    color: #ece9e6;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.ln-back:hover {
+    text-decoration: underline;
+}
+
+.ln-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.ln-title-divider {
+    width: 48px;
+    height: 3px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 36px;
+    border: none;
+}
+
+.ln-section {
+    margin-bottom: 28px;
+}
+
+.ln-subtitle {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.ln-list {
+    list-style: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.ln-text {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 10px;
+}
+
+.ln-text:last-child {
+    margin-bottom: 0;
+}
+
+.ln-link {
+   color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+}
+
+.ln-link:hover {
+    text-decoration: underline;
+}
