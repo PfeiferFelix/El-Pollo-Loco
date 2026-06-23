@@ -14,6 +14,7 @@ function startGame() {
         document.getElementById('mobile-btn-bar').style.display = 'flex';
         document.querySelector('h1').style.display = 'none';
     }
+    disableHomeButtons();
     if (!musicMuted) backgroundMusic.play();
     init();
 }
@@ -34,24 +35,30 @@ function closeHelp() {
     document.getElementById('help-screen').style.display = 'none';
 }
 
-function muteBackgroundMusic(){
+function muteBackgroundMusic() {
     musicMuted = true;
     localStorage.setItem('musicMuted', true);
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
 }
-function unmuteBackgroundMusic(){
+function unmuteBackgroundMusic() {
     musicMuted = false;
     localStorage.setItem('musicMuted', false);
     backgroundMusic.currentTime = 0;
     backgroundMusic.play();
 }
 
-function saveToLocalStorage(){
+function saveToLocalStorage() {
     localStorage.setItem('soundsMuted', soundsMuted);
 }
 
-function muteSounds(){
+function disableHomeButtons() {
+    if (window.innerWidth <= 768 || window.innerHeight <= 500) {
+        document.getElementById("menu_bar").style.display = 'none';
+    }
+}
+
+function muteSounds() {
     soundsMuted = true;
     saveToLocalStorage();
     if (!world) return;
@@ -67,7 +74,7 @@ function muteSounds(){
     world.audio_collect_coin.pause();
 }
 
-function unmuteSounds(){
+function unmuteSounds() {
     soundsMuted = false;
     saveToLocalStorage();
 }
