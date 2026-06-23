@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>El Pollo Loco</title>
+    <link rel="icon" type="image/x-icon" href="./img/taco.webp">
     <script src="./models/drawable-object.js"></script>
     <script src="./models/movable-object.class.js"></script>
     <script src="./models/character.class.js"></script>
@@ -26,6 +27,9 @@
     <script src="./models/throwable-object.class.js"></script>
     <script src="./levels/level1.js"></script>
     <script src="./js/game.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Changa+One:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -78,38 +82,20 @@
         </div>
         <div id="settings-screen">
             <h2 class="headline_settings">Settings</h2>
-            <div class="mute_section">
-                <span>Music</span>
-                <button id="muteButton" class="Menu-bar-btn" onclick="unmuteBackgroundMusic()">
-                    ON
-                </button>
-                <button class="Menu-bar-btn" onclick="muteBackgroundMusic()">
-                    OFF
-                </button>
+            <div class="settings-content">
+                <div class="mute_section">
+                    <span>Music</span>
+                    <button id="muteButton" class="setting-key" onclick="unmuteBackgroundMusic()">ON</button>
+                    <button class="setting-key" onclick="muteBackgroundMusic()">OFF</button>
+                </div>
+                <div class="mute_section">
+                    <span>Sounds</span>
+                    <button class="setting-key" onclick="unmuteSounds()">ON</button>
+                    <button class="setting-key" onclick="muteSounds()">OFF</button>
+                </div>
+         
             </div>
-            <div class="mute_section">
-                <span>Sounds</span>
-                <button class="Menu-bar-btn" onclick="unmuteSounds()">
-                    ON
-                </button>
-                <button class="Menu-bar-btn" onclick="muteSounds()">
-                    OFF
-                </button>
-            </div>
-
-            <div class="mute_section">
-                <span>Fullscreen</span>
-                <button class="Menu-bar-btn" onclick="muteBackgroundMusic()">
-                    ON
-                </button>
-                 <button class="Menu-bar-btn" onclick="muteBackgroundMusic()">
-                    OFF
-                </button>
-            </div>
-
-            <button class="settings-btn" onclick="closeSettings()">
-                Schließen
-            </button>
+            <button class="settings-btn" onclick="closeSettings()">Close</button>
         </div>
         <div id="help-screen">
             <h2 class="headline_settings">Help</h2>
@@ -127,7 +113,7 @@
                     </div>
                 </div>
             </div>
-            <button class="settings-btn" onclick="closeHelp()">Schließen</button>
+            <button class="settings-btn" onclick="closeHelp()">Close</button>
         </div>
     </div>
 
@@ -167,6 +153,6 @@
     </div>
 </body>
 <footer>
-    <a class="impressum" href="./legal-notice.html">Impressum</a>
+    <a class="impressum" href="./legal-notice.html">legal-notice</a>
 </footer>
 </html>
