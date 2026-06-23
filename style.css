@@ -154,13 +154,101 @@ canvas {
     }
 }
 
+/* Rotate hint — shown on phones in portrait */
+#rotate-hint {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #F77F19;
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    gap: 16px;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.rotate-icon {
+    font-size: 5rem;
+    animation: rotate-anim 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate-anim {
+    0%   { transform: rotate(0deg); }
+    50%  { transform: rotate(90deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+    #rotate-hint {
+        display: flex;
+    }
+}
+
+/* Landscape mobile — canvas fills full screen height */
+@media (orientation: landscape) and (max-height: 500px) {
+    body {
+        overflow: hidden;
+        height: 100svh;
+    }
+
+    h1, footer { display: none; }
+
+    #game-wrapper {
+        height: 100svh;
+        width: auto;
+        max-width: none;
+    }
+
+    canvas {
+        height: 100svh;
+        width: auto;
+    }
+
+    .Menu-bar {
+        position: fixed;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        max-width: none;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 4px 10px;
+        border-radius: 20px;
+        z-index: 50;
+    }
+
+    .Menu-bar-btn {
+        height: 30px;
+        width: 64px;
+        font-size: 0.7rem;
+    }
+}
+
 .mobile-btn-bar {
-    display: flex;
+    display: none;
     justify-content: space-between;
     width: 100%;
     max-width: 720px;
     padding: 8px 0;
     box-sizing: border-box;
+}
+
+/* Show on narrow screens (portrait) OR landscape phone (height ≤ 500px) */
+@media (orientation: landscape) and (max-height: 500px) {
+    .mobile-btn-bar {
+        position: fixed;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        max-width: none;
+        padding: 0 12px;
+        z-index: 50;
+    }
 }
 
 .move-btn,
@@ -202,6 +290,63 @@ canvas {
     border-radius: 8px;
     transition: background 0.2s, color 0.2s;
     margin-top: 40px;
+}
+
+.help-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 30px;
+    width: 100%;
+    max-width: 480px;
+}
+
+.help-section {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 14px 18px;
+}
+
+.help-section-title {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 10px 0;
+}
+
+.help-text {
+    color: #fff;
+    line-height: 1.6;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.help-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.key {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    min-width: 80px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .Menu-bar {
