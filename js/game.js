@@ -10,7 +10,10 @@ backgroundMusic.volume = 0.3;
 
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
-    document.getElementById('mobile-btn-bar').style.display = 'flex';
+    if (window.innerWidth <= 768 || window.innerHeight <= 500) {
+        document.getElementById('mobile-btn-bar').style.display = 'flex';
+        document.querySelector('h1').style.display = 'none';
+    }
     if (!musicMuted) backgroundMusic.play();
     init();
 }
