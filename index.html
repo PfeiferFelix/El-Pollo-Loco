@@ -29,6 +29,10 @@
 </head>
 
 <body>
+    <div id="rotate-hint">
+        <div class="rotate-icon">&#8635;</div>
+        <p>Bitte drehe dein Gerät</p>
+    </div>
     <h1>El Pollo Loco</h1>
     <div id="game-wrapper">
         <canvas id="canvas" width="720" height="480"></canvas>
@@ -109,9 +113,21 @@
         </div>
         <div id="help-screen">
             <h2 class="headline_settings">Help</h2>
-            <button class="settings-btn" onclick="closeHelp()">
-                Schließen
-            </button>
+            <div class="help-content">
+                <div class="help-section">
+                    <h3 class="help-section-title">About</h3>
+                    <p class="help-text">Help character Pepe defeat the Boss Chicken! On his way he will encounter baby chickens and full-grown chickens. Collect coins and salsa bottles — and save your salsa for the Boss Chicken!</p>
+                </div>
+                <div class="help-section">
+                    <h3 class="help-section-title">Controls</h3>
+                    <div class="help-controls">
+                        <div class="control-row"><span class="key">← →</span><span>Move left / right</span></div>
+                        <div class="control-row"><span class="key">↑ / Space</span><span>Jump</span></div>
+                        <div class="control-row"><span class="key">D</span><span>Throw Salsa bottle</span></div>
+                    </div>
+                </div>
+            </div>
+            <button class="settings-btn" onclick="closeHelp()">Schließen</button>
         </div>
     </div>
 
@@ -139,7 +155,7 @@
         </div>
     </div>
 
-    <div id="mobile-btn-bar" class="mobile-btn-bar" style="display:none">
+    <div id="mobile-btn-bar" class="mobile-btn-bar">
         <div class="move-btn">
             <button class="Menu-bar-btn" ontouchstart="keyboard.LEFT=true" ontouchend="keyboard.LEFT=false" ontouchcancel="keyboard.LEFT=false">left</button>
             <button class="Menu-bar-btn" ontouchstart="keyboard.RIGHT=true" ontouchend="keyboard.RIGHT=false" ontouchcancel="keyboard.RIGHT=false">right</button>
