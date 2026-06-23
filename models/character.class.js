@@ -146,6 +146,11 @@ class Character extends MovableObject {
             backgroundMusic.pause();
             backgroundMusic.currentTime = 0;
             if (!soundsMuted) this.audio_you_lost.play();
+            if (this.world.endboss) {
+                this.world.endboss.audio_attack.pause();
+                this.world.endboss.audio_attack.currentTime = 0;
+                clearInterval(this.world.endboss.jumpRepeatInterval);
+            }
             setTimeout(() => showGameOver(), 1500);
         }
     }
