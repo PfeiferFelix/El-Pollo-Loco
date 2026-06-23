@@ -7,6 +7,7 @@ let backgroundMusic = new Audio('audio/background.mp3');
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
 
+
 /**
  * This function makes the start screen invisible
  * When the Screen size is small the button bar on mobile will show up and the h1 will disapear
@@ -22,30 +23,44 @@ function startGame() {
     if (!musicMuted) backgroundMusic.play();
     init();
 }
+
+
 /**
  * opens the settings menu
  */
 function openSettings() {
     document.getElementById('settings-screen').style.display = 'flex';
+    document.getElementById('menu_bar').style.display = 'none';
 }
+
+
 /**
  * closes the settings menu
  */
 function closeSettings() {
     document.getElementById('settings-screen').style.display = 'none';
+    document.getElementById('menu_bar').style.display = 'flex';
 }
+
+
 /**
  * opens the help menu
  */
 function openHelp() {
     document.getElementById('help-screen').style.display = 'flex';
+    document.getElementById('menu_bar').style.display = 'none';
 }
+
+
 /**
- * closes the help menu
+ *  closes the help menu
  */
 function closeHelp() {
     document.getElementById('help-screen').style.display = 'none';
+    document.getElementById('menu_bar').style.display = 'flex';
 }
+
+
 /**
  * when its pressed, the backgorund music will be mute
  * and it pushes it to the local storage
@@ -57,6 +72,7 @@ function muteBackgroundMusic() {
     backgroundMusic.currentTime = 0;
 }
 
+
 /**
  * when its pressed, the backgorund music will be unmute
  * and it pushes it to the local storage
@@ -67,12 +83,16 @@ function unmuteBackgroundMusic() {
     backgroundMusic.currentTime = 0;
     backgroundMusic.play();
 }
+
+
 /**
  * saves the mute state to local storage
  */
 function saveToLocalStorage() {
     localStorage.setItem('soundsMuted', soundsMuted);
 }
+
+
 /**
  * when the screen size is small the menu bar will be transparent
  */
@@ -82,6 +102,14 @@ function disableHomeButtons() {
     }
 }
 
+
+/**
+ * Mutes all game sounds and persists the muted state to localStorage.
+ * Sets the global `soundsMuted` flag to true and pauses all active audio
+ * sources: character sounds (snoring, hurt, lose), enemy sounds (splash,
+ * attack, win), and world sounds (bottle splash, coin collect).
+ * Returns early without touching audio if the world is not yet initialised.
+ */
 function muteSounds() {
     soundsMuted = true;
     saveToLocalStorage();
@@ -97,6 +125,8 @@ function muteSounds() {
     world.audio_splash_bottle.pause();
     world.audio_collect_coin.pause();
 }
+
+
 /**
  * unmute the sounds
  */
@@ -105,22 +135,32 @@ function unmuteSounds() {
     saveToLocalStorage();
 }
 
+
+/**
+ * Initializes the game by binding the canvas element and creating a new World instance.
+ */
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
 }
+
+
 /**
  * game over screen
  */
 function showGameOver() {
     document.getElementById('game-over-screen').style.display = 'block';
 }
+
+
 /**
  * you won screen
  */
 function showYouWon() {
     document.getElementById('you-won-screen').style.display = 'block';
 }
+
+
 /**
  * game over, you won and start screen will be transparen
  * game starts from beginning
@@ -133,6 +173,8 @@ function restartGame() {
     backgroundMusic.play();
     init();
 }
+
+
 /**
  * gose back to the main menu
  */
@@ -141,6 +183,7 @@ function goToHomeMenu() {
     document.getElementById('you-won-screen').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
 }
+
 
 /**
  * key down key codes to move the character
@@ -165,6 +208,8 @@ window.addEventListener("keydown", (e) => {
         keyboard.D = true;
     }
 });
+
+
 /**
  * keyup keycodes to move the character
  */
