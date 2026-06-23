@@ -6,8 +6,11 @@ body {
     margin: 0;
     background-position: center;
     background-image: url(img/sketch1999-desert-5385998.png);
+    font-family: 'Changa One', sans-serif;
 }
-
+h1{
+    color: orange;
+}
 #game-wrapper {
     position: relative;
     width: 100%;
@@ -116,8 +119,13 @@ canvas {
     }
 
     .mute_section {
-        margin-top: 12px;
         gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .settings-content {
+        gap: 10px;
+        padding: 8px 16px;
     }
 
     .mute_section span {
@@ -260,7 +268,7 @@ canvas {
 #settings-screen,
 #help-screen {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -269,13 +277,14 @@ canvas {
     z-index: 20;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     color: white;
+    overflow-y: auto;
 }
 
 .headline_settings {
     margin-top: 10px;
     color: #000;
-
 }
 
 .settings-btn {
@@ -290,6 +299,7 @@ canvas {
     border-radius: 8px;
     transition: background 0.2s, color 0.2s;
     margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .help-content {
@@ -369,13 +379,40 @@ canvas {
     border: 2px solid #333;
 }
 
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 30px;
+    width: 100%;
+    max-width: 480px;
+}
+
 .mute_section {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 0;
     gap: 16px;
     width: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 14px 18px;
+    box-sizing: border-box;
+}
+
+.setting-key {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    min-width: 60px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Changa One', sans-serif;
 }
 
 .mute_section span {
