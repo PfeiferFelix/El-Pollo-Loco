@@ -27,9 +27,6 @@
     <script src="./models/throwable-object.class.js"></script>
     <script src="./levels/level1.js"></script>
     <script src="./js/game.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Changa+One:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -143,12 +140,12 @@
 
     <div id="mobile-btn-bar" class="mobile-btn-bar">
         <div class="move-btn">
-            <button class="Menu-bar-btn" ontouchstart="keyboard.LEFT=true" ontouchend="keyboard.LEFT=false" ontouchcancel="keyboard.LEFT=false">left</button>
-            <button class="Menu-bar-btn" ontouchstart="keyboard.RIGHT=true" ontouchend="keyboard.RIGHT=false" ontouchcancel="keyboard.RIGHT=false">right</button>
+            <button class="Menu-bar-btn" ontouchstart="keyboard.LEFT=true" ontouchend="keyboard.LEFT=false" ontouchcancel="keyboard.LEFT=false" oncontextmenu="return false">left</button>
+            <button class="Menu-bar-btn" ontouchstart="keyboard.RIGHT=true" ontouchend="keyboard.RIGHT=false" ontouchcancel="keyboard.RIGHT=false" oncontextmenu="return false">right</button>
         </div>
         <div class="do-btn">
-            <button class="Menu-bar-btn" ontouchstart="keyboard.UP=true" ontouchend="keyboard.UP=false" ontouchcancel="keyboard.UP=false">UP</button>
-            <button class="Menu-bar-btn" ontouchstart="keyboard.D=true" ontouchend="keyboard.D=false" ontouchcancel="keyboard.D=false">throw</button>
+            <button class="Menu-bar-btn" ontouchstart="keyboard.UP=true" ontouchend="keyboard.UP=false" ontouchcancel="keyboard.UP=false" oncontextmenu="return false">UP</button>
+            <button class="Menu-bar-btn" ontouchstart="keyboard.D=true" ontouchend="keyboard.D=false" ontouchcancel="keyboard.D=false" oncontextmenu="return false">throw</button>
         </div>
     </div>
 </body>
