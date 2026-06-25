@@ -127,11 +127,15 @@ canvas {
 
 @media only screen and (max-width: 480px) {
 
-
     .Menu-bar {
         gap: 20px;
         flex-wrap: wrap;
         justify-content: center;
+    }
+
+    .dialog-tab {
+        padding: 10px 0;
+        font-size: 0.85rem;
     }
 
     .mute_section {
@@ -139,9 +143,10 @@ canvas {
         padding: 10px 12px;
     }
 
-    .settings-content {
+    .settings-content,
+    .help-content {
         gap: 10px;
-        padding: 8px 16px;
+        padding: 12px 16px 8px;
     }
 
     .mute_section span {
@@ -281,26 +286,97 @@ canvas {
     gap: 10px;
 }
 
-#settings-screen,
-#help-screen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #F77F19;
-    z-index: 20;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    overflow-y: auto;
+#ingame-settings-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.7);
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.2s;
 }
 
-.headline_settings {
-    margin-top: 10px;
-    color: #000;
+#ingame-settings-btn:hover {
+    background: rgba(0,0,0,0.7);
+}
+
+#game-dialog {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 20;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.dialog-box {
+    background: #F77F19;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 460px;
+    max-height: calc(100svh - 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+}
+
+.dialog-tabs {
+    display: flex;
+    flex-shrink: 0;
+    width: 100%;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.dialog-content {
+    width: 100%;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.dialog-tab {
+    flex: 1;
+    padding: 14px 0;
+    font-family: 'Changa One', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    background: rgba(0, 0, 0, 0.15);
+    color: rgba(255, 255, 255, 0.65);
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.dialog-tab:first-child {
+    border-radius: 16px 0 0 0;
+}
+
+.dialog-tab:last-child {
+    border-radius: 0 16px 0 0;
+}
+
+.dialog-tab.active {
+    background: #F77F19;
+    color: #fff;
+}
+
+.dialog-tab:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.08);
+    color: #fff;
 }
 
 .settings-btn {
@@ -314,17 +390,24 @@ canvas {
     border: 2px solid #fff;
     border-radius: 8px;
     transition: background 0.2s, color 0.2s;
-    margin-top: 40px;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.settings-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
 }
 
 .help-content {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 10px 30px;
+    padding: 20px 30px 10px;
     width: 100%;
     max-width: 480px;
+    box-sizing: border-box;
 }
 
 .help-section {
@@ -399,9 +482,10 @@ canvas {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 10px 30px;
+    padding: 20px 30px 10px;
     width: 100%;
     max-width: 480px;
+    box-sizing: border-box;
 }
 
 .mute_section {
@@ -425,10 +509,18 @@ canvas {
     font-size: 0.9rem;
     min-width: 60px;
     text-align: center;
-    color: white;
+    color: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     font-weight: bold;
     font-family: 'Changa One', sans-serif;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.setting-key.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.35);
 }
 
 .mute_section span {
@@ -442,6 +534,86 @@ canvas {
     text-decoration: none;
     display: flex;
     color: #fff;
+}
+
+/* Compact dialog for landscape mobile (≤ 520px tall) */
+@media (max-height: 520px) {
+    #game-dialog {
+        padding: 6px;
+        align-items: flex-start;
+        padding-top: 6px;
+    }
+
+    .dialog-box {
+        max-height: calc(100svh - 12px);
+        border-radius: 10px;
+    }
+
+    .dialog-tab {
+        padding: 7px 0;
+        font-size: 0.78rem;
+    }
+
+    .settings-content,
+    .help-content {
+        gap: 7px;
+        padding: 8px 12px 6px;
+    }
+
+    .help-section {
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .help-section-title {
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+    }
+
+    .help-text {
+        font-size: 0.78rem;
+        line-height: 1.35;
+    }
+
+    .control-row {
+        font-size: 0.78rem;
+        gap: 8px;
+    }
+
+    .key {
+        font-size: 0.72rem;
+        padding: 3px 6px;
+        min-width: 60px;
+    }
+
+    .help-controls {
+        gap: 5px;
+    }
+
+    .mute_section {
+        padding: 7px 10px;
+        gap: 10px;
+        border-radius: 8px;
+    }
+
+    .mute_section span {
+        font-size: 0.85rem;
+        width: 70px;
+    }
+
+    .setting-key {
+        padding: 3px 8px;
+        font-size: 0.78rem;
+        min-width: 44px;
+    }
+
+    .settings-btn {
+        height: 32px;
+        width: 130px;
+        font-size: 0.78rem;
+        margin-top: 8px;
+        border-radius: 6px;
+    }
 }
 
 footer {

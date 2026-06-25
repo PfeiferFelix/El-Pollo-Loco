@@ -15,6 +15,7 @@ backgroundMusic.volume = 0.3;
  */
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('ingame-settings-btn').style.display = 'block';
     if (window.innerWidth <= 768 || window.innerHeight <= 500) {
         document.getElementById('mobile-btn-bar').style.display = 'flex';
         document.querySelector('h1').style.display = 'none';
@@ -25,63 +26,56 @@ function startGame() {
 }
 
 
-/**
- * opens the settings menu
- */
-function openSettings() {
-    document.getElementById('settings-screen').style.display = 'flex';
-    document.getElementById('menu_bar').style.display = 'none';
+function openDialog(tab) {
+    switchTab(tab || 'settings');
+    document.getElementById('game-dialog').style.display = 'flex';
 }
 
-
-/**
- * closes the settings menu
- */
-function closeSettings() {
-    document.getElementById('settings-screen').style.display = 'none';
-    document.getElementById('menu_bar').style.display = 'flex';
+function closeDialog() {
+    document.getElementById('game-dialog').style.display = 'none';
 }
 
-
-/**
- * opens the help menu
- */
-function openHelp() {
-    document.getElementById('help-screen').style.display = 'flex';
-    document.getElementById('menu_bar').style.display = 'none';
+function closeDialogOnBackdrop(event) {
+    if (event.target === document.getElementById('game-dialog')) closeDialog();
 }
 
-
-/**
- *  closes the help menu
- */
-function closeHelp() {
-    document.getElementById('help-screen').style.display = 'none';
-    document.getElementById('menu_bar').style.display = 'flex';
+function switchTab(tab) {
+    document.getElementById('tab-content-settings').style.display = tab === 'settings' ? 'block' : 'none';
+    document.getElementById('tab-content-help').style.display = tab === 'help' ? 'block' : 'none';
+    document.getElementById('tab-settings').classList.toggle('active', tab === 'settings');
+    document.getElementById('tab-help').classList.toggle('active', tab === 'help');
 }
 
+function openSettings() { openDialog('settings'); }
+function closeSettings() { closeDialog(); }
+function openHelp() { openDialog('help'); }
+function closeHelp() { closeDialog(); }
 
-/**
- * when its pressed, the backgorund music will be mute
- * and it pushes it to the local storage
- */
+
+function setMusicButtons(muted) {
+    document.getElementById('music-on').classList.toggle('active', !muted);
+    document.getElementById('music-off').classList.toggle('active', muted);
+}
+
+function setSoundsButtons(muted) {
+    document.getElementById('sounds-on').classList.toggle('active', !muted);
+    document.getElementById('sounds-off').classList.toggle('active', muted);
+}
+
 function muteBackgroundMusic() {
     musicMuted = true;
     localStorage.setItem('musicMuted', true);
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
+    setMusicButtons(true);
 }
 
-
-/**
- * when its pressed, the backgorund music will be unmute
- * and it pushes it to the local storage
- */
 function unmuteBackgroundMusic() {
     musicMuted = false;
     localStorage.setItem('musicMuted', false);
     backgroundMusic.currentTime = 0;
     backgroundMusic.play();
+    setMusicButtons(false);
 }
 
 
@@ -113,6 +107,7 @@ function disableHomeButtons() {
 function muteSounds() {
     soundsMuted = true;
     saveToLocalStorage();
+    setSoundsButtons(true);
     if (!world) return;
     world.character.audio_snoring.pause();
     world.character.audio_you_lost.pause();
@@ -127,18 +122,20 @@ function muteSounds() {
 }
 
 
-/**
- * unmute the sounds
- */
 function unmuteSounds() {
     soundsMuted = false;
     saveToLocalStorage();
+    setSoundsButtons(false);
 }
 
 
-/**
- * Initializes the game by binding the canvas element and creating a new World instance.
- */
+function initSettingsUI() {
+    setMusicButtons(musicMuted);
+    setSoundsButtons(soundsMuted);
+}
+
+window.addEventListener('DOMContentLoaded', initSettingsUI);
+
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
@@ -189,6 +186,7 @@ function goToHomeMenu() {
  * key down key codes to move the character
  */
 window.addEventListener("keydown", (e) => {
+    if (e.key === 'Escape') { closeDialog(); return; }
     if (e.keyCode == 39) {
         keyboard.RIGHT = true;
     }

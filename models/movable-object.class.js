@@ -22,6 +22,9 @@ class MovableObject extends DrawableObject {
     /** @type {number} Timestamp (ms) of the last received hit — used by `isHurt()`. */
     lastHit = 0;
 
+    /** @type {{top:number, left:number, right:number, bottom:number}} Inset from sprite edges to effective hitbox. */
+    offset = { top: 0, left: 0, right: 0, bottom: 0 };
+
     /**
      * Starts the gravity loop at 25 fps.
      * While the object is above ground or still moving upward, applies vertical velocity and
@@ -71,22 +74,22 @@ class MovableObject extends DrawableObject {
      * @param {MovableObject} movableObject - The object to test collision against.
      * @returns {boolean}
      */
-    isColliding(movableObject) {
-        return this.x + this.width > movableObject.x &&
-            this.y + this.height > movableObject.y &&
-            this.x < movableObject.x + movableObject.width &&
-            this.y < movableObject.y + movableObject.height;
+    isColliding(mo) {
+        const aLeft   = this.x + this.offset.left;
+        const aRight  = this.x + this.width  - this.offset.right;
+        const aTop    = this.y + this.offset.top;
+        const aBottom = this.y + this.height - this.offset.bottom;
+        const bLeft   = mo.x + mo.offset.left;
+        const bRight  = mo.x + mo.width  - mo.offset.right;
+        const bTop    = mo.y + mo.offset.top;
+        const bBottom = mo.y + mo.height - mo.offset.bottom;
+        return aRight > bLeft && aBottom > bTop && aLeft < bRight && aTop < bBottom;
     }
 
-    /**
-     * Returns true when this object is falling (speedY < 0) onto the top of an enemy.
-     * Uses a 45 px tolerance so the character must land near the enemy's upper edge.
-     * @param {MovableObject} enemy - The enemy to check against.
-     * @returns {boolean}
-     */
     isJumpingOnTop(enemy) {
-        return this.speedY < 0 &&
-            this.isColliding(enemy) && this.y + this.height < enemy.y + 45;
+        const myBottom  = this.y + this.height - this.offset.bottom;
+        const enemyTop  = enemy.y + enemy.offset.top;
+        return this.speedY < 0 && this.isColliding(enemy) && myBottom < enemyTop + 40;
     }
 
     /**

@@ -182,7 +182,7 @@ class Endboss extends MovableObject {
      */
     isCharacterInSight() {
         let distance = this.x - this.character.x;
-        return distance < 300;
+        return distance < 800;
     }
 
     /**

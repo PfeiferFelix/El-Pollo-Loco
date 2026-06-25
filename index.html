@@ -37,6 +37,7 @@
     <h1>El Pollo Loco</h1>
     <div id="game-wrapper">
         <canvas id="canvas" width="720" height="480"></canvas>
+        <button id="ingame-settings-btn" onclick="openDialog('settings')" style="display:none">⚙</button>
         <div id="start-screen">
             <img id="start-screen-img" src="img/9_intro_outro_screens/start/startscreen_2.png" alt="start-screen" />
         </div>
@@ -77,63 +78,61 @@
                 </button>
             </div>
         </div>
-        <div id="settings-screen">
-            <h2 class="headline_settings">Settings</h2>
-            <div class="settings-content">
-                <div class="mute_section">
-                    <span>Music</span>
-                    <button id="muteButton" class="setting-key" onclick="unmuteBackgroundMusic()">ON</button>
-                    <button class="setting-key" onclick="muteBackgroundMusic()">OFF</button>
+        <div id="game-dialog" onclick="closeDialogOnBackdrop(event)">
+            <div class="dialog-box">
+                <div class="dialog-tabs">
+                    <button id="tab-settings" class="dialog-tab active" onclick="switchTab('settings')">Settings</button>
+                    <button id="tab-help" class="dialog-tab" onclick="switchTab('help')">Help</button>
                 </div>
-                <div class="mute_section">
-                    <span>Sounds</span>
-                    <button class="setting-key" onclick="unmuteSounds()">ON</button>
-                    <button class="setting-key" onclick="muteSounds()">OFF</button>
-                </div>
-         
-            </div>
-            <button class="settings-btn" onclick="closeSettings()">Close</button>
-        </div>
-        <div id="help-screen">
-            <h2 class="headline_settings">Help</h2>
-            <div class="help-content">
-                <div class="help-section">
-                    <h3 class="help-section-title">About</h3>
-                    <p class="help-text">Help character Pepe defeat the Boss Chicken! On his way he will encounter baby chickens and full-grown chickens. Collect coins and salsa bottles — and save your salsa for the Boss Chicken!</p>
-                </div>
-                <div class="help-section">
-                    <h3 class="help-section-title">Controls</h3>
-                    <div class="help-controls">
-                        <div class="control-row"><span class="key">← →</span><span>Move left / right</span></div>
-                        <div class="control-row"><span class="key">↑ / Space</span><span>Jump</span></div>
-                        <div class="control-row"><span class="key">D</span><span>Throw Salsa bottle</span></div>
+                <div id="tab-content-settings" class="dialog-content">
+                    <div class="settings-content">
+                        <div class="mute_section">
+                            <span>Music</span>
+                            <button id="music-on" class="setting-key" onclick="unmuteBackgroundMusic()">ON</button>
+                            <button id="music-off" class="setting-key" onclick="muteBackgroundMusic()">OFF</button>
+                        </div>
+                        <div class="mute_section">
+                            <span>Sounds</span>
+                            <button id="sounds-on" class="setting-key" onclick="unmuteSounds()">ON</button>
+                            <button id="sounds-off" class="setting-key" onclick="muteSounds()">OFF</button>
+                        </div>
                     </div>
                 </div>
+                <div id="tab-content-help" class="dialog-content" style="display:none">
+                    <div class="help-content">
+                        <div class="help-section">
+                            <h3 class="help-section-title">About</h3>
+                            <p class="help-text">Help character Pepe defeat the Boss Chicken! On his way he will encounter baby chickens and full-grown chickens. Collect coins and salsa bottles — and save your salsa for the Boss Chicken!</p>
+                        </div>
+                        <div class="help-section">
+                            <h3 class="help-section-title">Controls</h3>
+                            <div class="help-controls">
+                                <div class="control-row"><span class="key">← →</span><span>Move left / right</span></div>
+                                <div class="control-row"><span class="key">↑ / Space</span><span>Jump</span></div>
+                                <div class="control-row"><span class="key">D</span><span>Throw Salsa bottle</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="settings-btn" onclick="closeDialog()">Close</button>
             </div>
-            <button class="settings-btn" onclick="closeHelp()">Close</button>
         </div>
     </div>
 
     <div id="menu_bar" class="Menu-bar">
         <div class="Menu_Buttons">
             <div class="Start_Game">
-                <button id="menu_bar_btn" class="Menu-bar-btn" onclick="openSettings()">
-                    Settings
-                </button>
+                <button class="Menu-bar-btn" onclick="openDialog('settings')">Settings</button>
             </div>
         </div>
         <div class="Menu_Buttons">
             <div class="Start_Game">
-                <button class="Menu-bar-btn" onclick="startGame()">
-                    Start Game
-                </button>
+                <button class="Menu-bar-btn" onclick="startGame()">Start Game</button>
             </div>
         </div>
         <div class="Menu_Buttons">
             <div class="Start_Game">
-                <button class="Menu-bar-btn" onclick="openHelp()">
-                    Help
-                </button>
+                <button class="Menu-bar-btn" onclick="openDialog('help')">Help</button>
             </div>
         </div>
     </div>

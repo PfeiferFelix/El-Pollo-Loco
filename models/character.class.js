@@ -16,6 +16,8 @@ class Character extends MovableObject {
     /** @type {number} Horizontal movement speed in pixels per frame. */
     speed = 10;
 
+    offset = { top: 120, left: 30, right: 30, bottom: 10 };
+
     /** @type {string[]} Animation frames for the walking state. */
     IMAGES_WALKING = [
         "img/2_character_pepe/2_walk/W-21.png",
