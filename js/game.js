@@ -13,12 +13,15 @@ backgroundMusic.volume = 0.3;
  * When the Screen size is small the button bar on mobile will show up and the h1 will disapear
  * so have no scrollbar.
  */
+function isTouchDevice() {
+    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('ingame-settings-btn').style.display = 'block';
-    if (window.innerWidth <= 768 || window.innerHeight <= 500) {
+    if (isTouchDevice()) {
         document.getElementById('mobile-btn-bar').style.display = 'flex';
-        document.querySelector('h1').style.display = 'none';
     }
     disableHomeButtons();
     if (!musicMuted) backgroundMusic.play();
@@ -166,6 +169,9 @@ function restartGame() {
     document.getElementById('game-over-screen').style.display = 'none';
     document.getElementById('you-won-screen').style.display = 'none';
     document.getElementById('start-screen').style.display = 'none';
+    if (isTouchDevice()) {
+        document.getElementById('mobile-btn-bar').style.display = 'flex';
+    }
     backgroundMusic.currentTime = 0;
     backgroundMusic.play();
     init();
@@ -179,6 +185,7 @@ function goToHomeMenu() {
     document.getElementById('game-over-screen').style.display = 'none';
     document.getElementById('you-won-screen').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
+    document.getElementById('mobile-btn-bar').style.display = 'none';
 }
 
 
