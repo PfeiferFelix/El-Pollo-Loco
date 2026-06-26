@@ -84,12 +84,66 @@ class World {
      * Each tick checks collisions, throw input, and collectible pickup.
      */
     run() {
-        setInterval(() => {
+        this.runInterval = setInterval(() => {
             this.checkcolissions();
             this.checkThrowObjects();
             this.collectCoins();
             this.collectSalsa();
+            this.scheduleDeadEnemyRemoval();
         }, 1000 / 60);
+    }
+
+    /**
+     * Schedules removal of dead non-boss enemies 500 ms after they die and clears their animation interval.
+     */
+    scheduleDeadEnemyRemoval() {
+        this.level.enemies.forEach(enemy => {
+            if (enemy.isDead() && !(enemy instanceof Endboss) && !enemy.removalScheduled) {
+                enemy.removalScheduled = true;
+                setTimeout(() => {
+                    clearInterval(enemy.animationInterval);
+                    this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+                }, 500);
+            }
+        });
+    }
+
+    /**
+     * Stops all running intervals and animation frames to cleanly tear down the world on restart.
+     */
+    destroy() {
+        clearInterval(this.runInterval);
+        cancelAnimationFrame(this.rafId);
+        clearInterval(this.character.movementInterval);
+        clearInterval(this.character.animationInterval);
+        clearInterval(this.character.gravityInterval);
+        this.clearEnemyIntervals();
+        this.clearBottleIntervals();
+    }
+
+    /**
+     * Clears all movement, animation, gravity, and jump intervals for every enemy and cloud.
+     */
+    clearEnemyIntervals() {
+        this.level.enemies.forEach(enemy => {
+            clearInterval(enemy.movementInterval);
+            clearInterval(enemy.animationInterval);
+            clearInterval(enemy.gravityInterval);
+            clearInterval(enemy.moveInterval);
+            clearInterval(enemy.jumpRepeatInterval);
+        });
+        this.level.clouds.forEach(cloud => clearInterval(cloud.moveInterval));
+    }
+
+    /**
+     * Clears the throw, animation, and gravity intervals for every active bottle.
+     */
+    clearBottleIntervals() {
+        this.throwableObject.forEach(bottle => {
+            clearInterval(bottle.ThrowIntervall);
+            clearInterval(bottle.animateInterval);
+            clearInterval(bottle.gravityInterval);
+        });
     }
 
     /**
@@ -98,19 +152,27 @@ class World {
      */
     checkThrowObjects() {
         if (this.keyboard.D && this.salsa > 0 && !this.bottleThrown) {
-            let facingLeft = this.character.otherDirection;
-            let xOffset = facingLeft ? -20 : 100;
-            let bottle = new ThrowableObject(this.character.x + xOffset, this.character.y + 100, facingLeft);
-            this.throwableObject.push(bottle);
-            bottle.world = this;
-            this.salsa--;
-            this.bottleThrown = true;
-            let percentage = (this.salsa / 5) * 100;
-            this.statusBarSalsa.setPercantage(percentage);
+            this.throwBottle();
         }
         if (!this.keyboard.D) {
             this.bottleThrown = false;
         }
+    }
+
+    /**
+     * Creates a new ThrowableObject at the character's position, adds it to the world,
+     * decrements the salsa count, and updates the salsa HUD.
+     */
+    throwBottle() {
+        let facingLeft = this.character.otherDirection;
+        let xOffset = facingLeft ? -20 : 100;
+        let bottle = new ThrowableObject(this.character.x + xOffset, this.character.y + 100, facingLeft);
+        this.throwableObject.push(bottle);
+        bottle.world = this;
+        this.salsa--;
+        this.bottleThrown = true;
+        let percentage = (this.salsa / 5) * 100;
+        this.statusBarSalsa.setPercantage(percentage);
     }
 
     /**
@@ -121,12 +183,27 @@ class World {
      * - Character jumping on top of an enemy (stomp → enemy hit, character bounces)
      */
     checkcolissions() {
+        this.checkCharacterEnemyCollisions();
+        this.checkBottleEndbossCollisions();
+        this.checkBottleChickenAndStompCollisions();
+    }
+
+    /**
+     * Hits the character when it touches a living enemy (body contact, not stomp).
+     */
+    checkCharacterEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && !this.character.isDead() && !this.character.isHurt() && !this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
                 this.character.hit();
                 this.statusBar.setPercantage(this.character.energy);
             }
         });
+    }
+
+    /**
+     * Removes bottles that hit the endboss, applies damage, and plays the splash sound.
+     */
+    checkBottleEndbossCollisions() {
         let endboss = this.level.enemies.find(e => e instanceof Endboss);
         if (endboss) {
             this.throwableObject = this.throwableObject.filter((bottle) => {
@@ -139,23 +216,44 @@ class World {
                 return true;
             });
         }
+    }
+
+    /**
+     * Iterates all enemies and checks both bottle-hits and stomp-kills for each.
+     */
+    checkBottleChickenAndStompCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
-                this.throwableObject = this.throwableObject.filter((bottle) => {
-                    if (enemy.isColliding(bottle) && !enemy.isDead()) {
-                        enemy.hit();
-                        if (!soundsMuted) this.audio_splash_bottle.play();
-                        return false;
-                    }
-                    return true;
-                });
-            }
-            if (this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
-                enemy.hit();
-                this.character.speedY = 8;
-                return;
-            }
+            this.checkBottleChickenCollision(enemy);
+            this.checkStompCollision(enemy);
         });
+    }
+
+    /**
+     * Removes bottles that hit a living Chicken or ChickenSmall and plays the splash sound.
+     * @param {Chicken|ChickenSmall} enemy - The enemy to test against active bottles.
+     */
+    checkBottleChickenCollision(enemy) {
+        if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
+            this.throwableObject = this.throwableObject.filter((bottle) => {
+                if (enemy.isColliding(bottle) && !enemy.isDead()) {
+                    enemy.hit();
+                    if (!soundsMuted) this.audio_splash_bottle.play();
+                    return false;
+                }
+                return true;
+            });
+        }
+    }
+
+    /**
+     * Hits the enemy and bounces the character upward when the character lands on top of it.
+     * @param {MovableObject} enemy - The enemy to test for a stomp.
+     */
+    checkStompCollision(enemy) {
+        if (this.character.isJumpingOnTop(enemy) && !enemy.isDead()) {
+            enemy.hit();
+            this.character.speedY = 8;
+        }
     }
 
     /**
@@ -201,30 +299,36 @@ class World {
      */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
-
         this.ctx.translate(-this.camera_x, 0);
+        this.drawHUD();
+        this.ctx.translate(this.camera_x, 0);
+        this.drawWorldObjects();
+        this.ctx.translate(-this.camera_x, 0);
+        this.rafId = requestAnimationFrame(() => this.draw());
+    }
+
+    /**
+     * Draws all four HUD status bars onto the canvas at their fixed screen positions.
+     */
+    drawHUD() {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarSalsa);
         this.addToMap(this.statusBarBoss);
-        this.ctx.translate(this.camera_x, 0);
+    }
 
+    /**
+     * Draws the character, coins, salsa bottles, enemies, and thrown bottles inside the camera transform.
+     */
+    drawWorldObjects() {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.salsa);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObject);
-
-        this.ctx.translate(-this.camera_x, 0);
-
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
     }
 
     /**

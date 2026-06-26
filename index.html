@@ -78,7 +78,7 @@
                 </button>
             </div>
         </div>
-        <div id="game-dialog" onclick="closeDialogOnBackdrop(event)">
+        <dialog id="game-dialog" onclick="closeDialogOnBackdrop(event)">
             <div class="dialog-box">
                 <div class="dialog-tabs">
                     <button id="tab-settings" class="dialog-tab active" onclick="switchTab('settings')">Settings</button>
@@ -112,12 +112,12 @@
                                 <div class="control-row"><span class="key">D</span><span>Throw Salsa bottle</span></div>
                             </div>
                         </div>
+                        <a href="./legal-notice.html" class="dialog-legal-link">Legal Notice</a>
                     </div>
                 </div>
-                <a href="./legal-notice.html" class="dialog-legal-link">Legal Notice</a>
                 <button class="settings-btn" onclick="closeDialog()">Close</button>
             </div>
-        </div>
+        </dialog>
     </div>
 
     <div id="menu_bar" class="Menu-bar">
@@ -128,7 +128,8 @@
         </div>
         <div class="Menu_Buttons">
             <div class="Start_Game">
-                <button class="Menu-bar-btn" onclick="startGame()">Start Game</button>
+                <button id="start-game-btn" class="Menu-bar-btn" onclick="startGame()">Start Game</button>
+                <button id="restart-game-btn" class="Menu-bar-btn" onclick="restartGame()" style="display:none">Restart</button>
             </div>
         </div>
         <div class="Menu_Buttons">

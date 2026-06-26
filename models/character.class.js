@@ -126,8 +126,8 @@ class Character extends MovableObject {
      * - animation state evaluation at ~14 fps (70 ms)
      */
     animate() {
-        setInterval(() => this.handleMovement(), 1000/60);
-        setInterval(() => this.playAnimationState(), 130);
+        this.movementInterval = setInterval(() => this.handleMovement(), 1000/60);
+        this.animationInterval = setInterval(() => this.playAnimationState(), 130);
     }
 
     /**
@@ -181,11 +181,27 @@ class Character extends MovableObject {
             this.handleAboveGround();
         } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             this.handleWalking();
-        } else if (Date.now() - this.lastActionTime > 15000) {
+        } else {
+            this.handleIdleState();
+        }
+        this.resetHurtFlag();
+    }
+
+    /**
+     * Delegates to long-idle or short-idle depending on inactivity duration.
+     */
+    handleIdleState() {
+        if (Date.now() - this.lastActionTime > 15000) {
             this.handleLongIdle();
         } else {
             this.handleIdle();
         }
+    }
+
+    /**
+     * Clears the hurt-audio guard flag once the character is no longer hurt.
+     */
+    resetHurtFlag() {
         if (!this.isHurt()) {
             this.audio_hurtPlayed = false;
         }
@@ -200,17 +216,24 @@ class Character extends MovableObject {
         this.audio_snoring.pause();
         this.audio_snoring.currentTime = 0;
         if (!this.audio_you_lostPlayed) {
-            this.audio_you_lostPlayed = true;
-            backgroundMusic.pause();
-            backgroundMusic.currentTime = 0;
-            if (!soundsMuted) this.audio_you_lost.play();
-            if (this.world.endboss) {
-                this.world.endboss.audio_attack.pause();
-                this.world.endboss.audio_attack.currentTime = 0;
-                clearInterval(this.world.endboss.jumpRepeatInterval);
-            }
-            setTimeout(() => showGameOver(), 1500);
+            this.triggerGameOver();
         }
+    }
+
+    /**
+     * Plays the game-over sound, freezes the endboss attack, and shows the game-over screen after 1.5 s.
+     */
+    triggerGameOver() {
+        this.audio_you_lostPlayed = true;
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+        if (!soundsMuted) this.audio_you_lost.play();
+        if (this.world.endboss) {
+            this.world.endboss.audio_attack.pause();
+            this.world.endboss.audio_attack.currentTime = 0;
+            clearInterval(this.world.endboss.jumpRepeatInterval);
+        }
+        setTimeout(() => showGameOver(), 1500);
     }
 
     /**
@@ -222,10 +245,20 @@ class Character extends MovableObject {
     }
 
     /**
-     * Plays the jump animation and silences ambient sounds while the character is airborne.
+     * Selects the jump frame based on current vertical speed so the animation stays
+     * in sync with the physics arc instead of racing through at a fixed interval.
      */
     handleAboveGround() {
-        this.playAnimationOnce(this.IMAGES_JUMPING);
+        const frames = this.IMAGES_JUMPING;
+        let frameIndex;
+        if (this.speedY > 0) {
+            const t = Math.max(0, 1 - this.speedY / 20);
+            frameIndex = Math.round(t * 4);
+        } else {
+            const t = Math.min(-this.speedY / 16, 1);
+            frameIndex = 4 + Math.round(t * 4);
+        }
+        this.img = this.imageCache[frames[Math.min(frameIndex, frames.length - 1)]];
         this.stopAmbientAudio();
     }
 

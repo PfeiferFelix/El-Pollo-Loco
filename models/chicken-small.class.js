@@ -61,15 +61,15 @@ class ChickenSmall extends MovableObject {
      *    When the chicken is dead, it stops moving and plays the death frame.
      */
     animate() {
-        let animationInterval = setInterval(() => {
+        this.movementInterval = setInterval(() => {
             this.moveLeft();
         }, 1000 / 60);
-        setInterval(() => {
+        this.animationInterval = setInterval(() => {
             if (this.isDead()) {
                 this.deadAudio();
                 this.playAnimation(this.IMAGES_DEAD);
                 this.y = 330;
-                clearInterval(animationInterval);
+                clearInterval(this.movementInterval);
                 return;
             } else {
                 this.playAnimation(this.IMAGES_WALKING);

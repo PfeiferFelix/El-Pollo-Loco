@@ -26,6 +26,6 @@ class Cloud extends MovableObject {
      * Starts the continuous left-movement animation at 60 fps.
      */
     animate() {
-        setInterval(() => this.moveLeft(), 1000 / 60);
+        this.moveInterval = setInterval(() => this.moveLeft(), 1000 / 60);
     }
 }

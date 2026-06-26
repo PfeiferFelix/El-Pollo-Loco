@@ -32,28 +32,37 @@ class MovableObject extends DrawableObject {
      * For `ThrowableObject` instances, also handles the bottle-splash sequence when hitting the ground.
      */
     applyGravity() {
-        setInterval(() => {
+        this.gravityInterval = setInterval(() => {
             if (this.isaboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
             if (this instanceof ThrowableObject && this.y > this.groundY) {
-                clearInterval(this.ThrowIntervall);
-                clearInterval(this.animateInterval);
-                this.speedY = 0;
-                if (!this.splashSoundPlayed) {
-                    this.splashSoundPlayed = true;
-                    if (!soundsMuted) {
-                        this.world.audio_splash_bottle.currentTime = 0;
-                        this.world.audio_splash_bottle.play();
-                    }
-                }
-                this.playAnimation(this.BOTTLE_SPLASH);
-                if (this.currentImage >= this.BOTTLE_SPLASH.length) {
-                    this.world.throwableObject = this.world.throwableObject.filter(bottle => bottle !== this);
-                }
+                this.handleBottleSplash();
             }
         }, 1000 / 25);
+    }
+
+    /**
+     * Stops the throw and animate intervals, plays the splash sound once, cycles the splash animation,
+     * and removes the bottle from the world when the splash animation finishes.
+     */
+    handleBottleSplash() {
+        clearInterval(this.ThrowIntervall);
+        clearInterval(this.animateInterval);
+        this.speedY = 0;
+        if (!this.splashSoundPlayed) {
+            this.splashSoundPlayed = true;
+            if (!soundsMuted) {
+                this.world.audio_splash_bottle.currentTime = 0;
+                this.world.audio_splash_bottle.play();
+            }
+        }
+        this.playAnimation(this.BOTTLE_SPLASH);
+        if (this.currentImage >= this.BOTTLE_SPLASH.length) {
+            clearInterval(this.gravityInterval);
+            this.world.throwableObject = this.world.throwableObject.filter(bottle => bottle !== this);
+        }
     }
 
     /**
@@ -86,6 +95,11 @@ class MovableObject extends DrawableObject {
         return aRight > bLeft && aBottom > bTop && aLeft < bRight && aTop < bBottom;
     }
 
+    /**
+     * Returns true when this object is falling and its bottom edge overlaps the enemy's top area.
+     * @param {MovableObject} enemy - The enemy to test against.
+     * @returns {boolean}
+     */
     isJumpingOnTop(enemy) {
         const myBottom  = this.y + this.height - this.offset.bottom;
         const enemyTop  = enemy.y + enemy.offset.top;

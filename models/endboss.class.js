@@ -71,18 +71,32 @@ class Endboss extends MovableObject {
      */
     constructor() {
         super().loadImage("img/4_enemie_boss_chicken/2_alert/G5.png");
-        this.speed = 0.15;
+        this.loadAllImages();
+        this.initState();
+        this.animate();
+    }
+
+    /**
+     * Preloads all animation image sets into the image cache.
+     */
+    loadAllImages() {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_ALERT);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_ATTACK);
+    }
+
+    /**
+     * Sets the starting position, speed, and all behaviour flags to their initial values.
+     */
+    initState() {
         this.x = 4800;
+        this.speed = 0.15;
         this.isAlerted = false;
         this.alertFinished = false;
         this.hasJumped = false;
         this.isJumping = false;
-        this.animate();
     }
 
     /**
@@ -116,8 +130,7 @@ class Endboss extends MovableObject {
      */
     playStateAnimation() {
         if (this.isDead()) {
-            this.handleDead();
-            this.youWon();
+            this.handleDeadState();
         } else if (this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
         } else if (!this.isAlerted) {
@@ -129,6 +142,14 @@ class Endboss extends MovableObject {
         } else {
             this.handleAttack();
         }
+    }
+
+    /**
+     * Runs the death animation and triggers the win sequence.
+     */
+    handleDeadState() {
+        this.handleDead();
+        this.youWon();
     }
 
     /**
@@ -191,7 +212,7 @@ class Endboss extends MovableObject {
      */
     CharacterIsNotInSight() {
         let distance = this.x - this.character.x;
-        return distance >= 300;
+        return distance >= 800;
     }
 
     /**
@@ -202,24 +223,32 @@ class Endboss extends MovableObject {
     jumpVorwoard() {
         this.isJumping = true;
         this.attackAudio();
-        let distance = 0;
+        let distance = { value: 0 };
         let jumpVorwoardInterval = setInterval(() => {
-            if (!this.CharacterIsNotInSight()) {
-                this.x -= 10;
-            }
-            distance += 5;
-            if (distance <= 60) {
-                this.y -= 5;
-            } else {
-                this.y += 5;
-            }
-            if (distance >= 120) {
-                clearInterval(jumpVorwoardInterval);
-                this.y = 50;
-                this.isJumping = false;
-            }
-            this.audio_attackPlayed = false;
+            this.executeJumpStep(jumpVorwoardInterval, distance);
         }, 25);
+    }
+
+    /**
+     * Advances one tick of the jump-attack arc: moves the boss left if in range, adjusts vertical
+     * position along the parabola, and clears the interval after 120 distance units.
+     * @param {number} interval - The setInterval ID to clear when the jump finishes.
+     * @param {{value: number}} distance - Mutable distance counter shared with the interval closure.
+     */
+    executeJumpStep(interval, distance) {
+        if (!this.CharacterIsNotInSight()) this.x -= 10;
+        distance.value += 5;
+        if (distance.value <= 60) {
+            this.y -= 5;
+        } else {
+            this.y += 5;
+        }
+        if (distance.value >= 120) {
+            clearInterval(interval);
+            this.y = 50;
+            this.isJumping = false;
+        }
+        this.audio_attackPlayed = false;
     }
 
     /**
