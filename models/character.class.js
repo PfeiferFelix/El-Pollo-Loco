@@ -36,6 +36,9 @@ class Character extends MovableObject {
         "img/2_character_pepe/3_jump/J-34.png",
         "img/2_character_pepe/3_jump/J-35.png",
         "img/2_character_pepe/3_jump/J-36.png",
+        "img/2_character_pepe/3_jump/J-37.png",
+        "img/2_character_pepe/3_jump/J-38.png",
+        "img/2_character_pepe/3_jump/J-39.png",
     ];
 
     /** @type {string[]} Animation frames for the death sequence. */
@@ -123,8 +126,8 @@ class Character extends MovableObject {
      * - animation state evaluation at ~14 fps (70 ms)
      */
     animate() {
-        setInterval(() => this.handleMovement(), 1000 / 60);
-        setInterval(() => this.playAnimationState(), 70);
+        setInterval(() => this.handleMovement(), 1000/60);
+        setInterval(() => this.playAnimationState(), 130);
     }
 
     /**
@@ -267,6 +270,7 @@ class Character extends MovableObject {
      */
     jump() {
         this.speedY = 16;
+        this.img = this.imageCache[this.IMAGES_JUMPING[0]];
     }
 
     /**
