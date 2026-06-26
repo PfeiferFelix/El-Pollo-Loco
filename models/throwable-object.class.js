@@ -26,13 +26,15 @@ class ThrowableObject extends MovableObject {
      * Creates and immediately throws a bottle from the given position.
      * @param {number} x - Starting x-coordinate (usually the character's x + offset).
      * @param {number} y - Starting y-coordinate (usually the character's y + offset).
+     * @param {boolean} otherDirection - true if character is facing left.
      */
-    constructor(x, y) {
+    constructor(x, y, otherDirection = false) {
         super().loadImage("img/6_salsa_bottle/salsa_bottle.png");
         this.loadImages(this.THROW_BOTTLE);
         this.loadImages(this.BOTTLE_SPLASH);
         this.x = x;
         this.y = y;
+        this.otherDirection = otherDirection;
         this.groundY = 350;
         this.height = 100;
         this.width = 80;
@@ -49,8 +51,8 @@ class ThrowableObject extends MovableObject {
     }
 
     /**
-     * Launches the bottle to the right with an upward arc.
-     * Applies gravity for the vertical arc and moves the bottle right by 10 px every 25 ms.
+     * Launches the bottle in the direction the character is facing.
+     * Applies gravity for the vertical arc and moves the bottle by 10 px every 25 ms.
      * Stops horizontal movement after 500 distance units.
      */
     throw() {
@@ -58,7 +60,7 @@ class ThrowableObject extends MovableObject {
         this.applyGravity();
         let distance = 0;
         this.ThrowIntervall = setInterval(() => {
-            this.x += 10;
+            this.x += this.otherDirection ? -10 : 10;
             distance += 5;
             if (distance >= 500) {
                 clearInterval(this.ThrowIntervall);
