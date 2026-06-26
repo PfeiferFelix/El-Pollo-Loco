@@ -248,7 +248,8 @@ function restartGame() {
         document.getElementById('menu_bar').style.display = 'flex';
     }
     backgroundMusic.currentTime = 0;
-    backgroundMusic.play();
+    if (!musicMuted) backgroundMusic.play();
+    initSettingsUI();
     init();
 }
 
@@ -262,6 +263,9 @@ function goToHomeMenu() {
     document.getElementById('start-screen').style.display = 'flex';
     document.getElementById('mobile-btn-bar').style.display = 'none';
     document.getElementById('menu_bar').style.display = 'flex';
+    document.getElementById('start-game-btn').style.display = 'block';
+    document.getElementById('restart-game-btn').style.display = 'none';
+    document.getElementById('ingame-settings-btn').style.display = 'none';
 }
 
 
