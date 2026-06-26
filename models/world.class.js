@@ -98,7 +98,9 @@ class World {
      */
     checkThrowObjects() {
         if (this.keyboard.D && this.salsa > 0 && !this.bottleThrown) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            let facingLeft = this.character.otherDirection;
+            let xOffset = facingLeft ? -20 : 100;
+            let bottle = new ThrowableObject(this.character.x + xOffset, this.character.y + 100, facingLeft);
             this.throwableObject.push(bottle);
             bottle.world = this;
             this.salsa--;
