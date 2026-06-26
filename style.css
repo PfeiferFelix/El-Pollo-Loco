@@ -116,13 +116,16 @@ canvas {
     color: #000;
 }
 
+@media only screen and (max-width: 900px), (max-height: 640px) {
+    h1 {
+        display: none;
+    }
+}
+
 @media only screen and (max-width: 720px) {
     #game-wrapper {
         width: 100vw;
     }
-        h1{
-        display: none;
-}
 }
 
 @media only screen and (max-width: 480px) {
@@ -183,7 +186,6 @@ canvas {
     }
 }
 
-/* Rotate hint — shown on phones in portrait */
 #rotate-hint {
     display: none;
     position: fixed;
@@ -217,7 +219,7 @@ canvas {
     }
 }
 
-/* Landscape mobile — canvas fills full screen height */
+
 @media (orientation: landscape) and (max-height: 500px) {
     body {
         overflow: hidden;
@@ -267,7 +269,7 @@ canvas {
     box-sizing: border-box;
 }
 
-/* Show on narrow screens (portrait) OR landscape phone (height ≤ 500px) */
+
 @media (orientation: landscape) and (max-height: 500px) {
     .mobile-btn-bar {
         position: fixed;
@@ -536,7 +538,19 @@ canvas {
     color: #fff;
 }
 
-/* Compact dialog for landscape mobile (≤ 520px tall) */
+.dialog-legal-link {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.dialog-legal-link:hover {
+    color: #fff;
+}
+
+
 @media (max-height: 520px) {
     #game-dialog {
         padding: 6px;
